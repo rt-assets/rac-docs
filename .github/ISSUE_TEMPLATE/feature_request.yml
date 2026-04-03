@@ -1,0 +1,44 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for RAC? We'd love to hear it!
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - New component / system
+        - Improvement to existing feature
+        - Visual / appearance
+        - Performance
+        - Blueprint API / usability
+        - Documentation
+        - Demo content / examples
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What would you like?
+      placeholder: Describe the feature or improvement you'd like to see.
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      placeholder: What are you trying to achieve? How would this help your project?
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      placeholder: Links to examples, screenshots, videos, or other plugins that do something similar.

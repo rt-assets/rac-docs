@@ -1,0 +1,90 @@
+name: Bug Report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill out the details below so we can reproduce and fix it.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which RAC component is affected?
+      options:
+        - Cable Actor
+        - Wrapping Cable
+        - Verlet Cable Component
+        - Tether Component
+        - Cable Interaction Component
+        - Swing Component
+        - Pull Component
+        - Climb Component
+        - Tow Component
+        - Cable Point Component
+        - Pulley Component
+        - Zipline / Riding
+        - Niagara Integration
+        - Cable Web Utils
+        - Tether Utils
+        - Other / Unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: engine-version
+    attributes:
+      label: Engine Version
+      options:
+        - UE 5.4
+        - UE 5.5
+        - UE 5.6
+        - UE 5.7
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: RAC Plugin Version
+      placeholder: "e.g. 1.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      placeholder: Describe the bug clearly. What did you expect vs what actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Place a Cable Actor in the level
+        2. Set bRideable to true
+        3. Play in editor
+        4. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error logs / screenshots
+      description: Paste any relevant log output or attach screenshots
+      render: shell
+
+  - type: checkboxes
+    id: context
+    attributes:
+      label: Context
+      options:
+        - label: Happens in Editor (PIE)
+        - label: Happens in Packaged Build
+        - label: Blueprint-only project (no C++)
+        - label: Reproducible in a fresh project

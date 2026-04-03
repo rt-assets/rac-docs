@@ -1,0 +1,43 @@
+name: Question / Help
+description: Need help using RAC?
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Need help with RAC? Check the [documentation](https://rt-assets.github.io/rac-docs) first - if you can't find the answer, ask here!
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - Setup / installation
+        - Cable configuration
+        - Player interaction (grab, pin, cut)
+        - Tethering / connecting
+        - Riding / ziplines
+        - Swinging / grapple
+        - Climbing
+        - Towing
+        - Visuals / materials
+        - Performance / LOD
+        - Niagara integration
+        - Packaging / shipping
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      placeholder: What are you trying to do? What have you tried so far?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / setup
+      description: Share screenshots of your setup if relevant.

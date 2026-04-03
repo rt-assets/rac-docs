@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://rt-assets.github.io/rac-docs
+    about: Check the full documentation before opening an issue
+  - name: Email Support
+    url: mailto:rtassets@proton.me
+    about: For private or account-related inquiries
