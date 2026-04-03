@@ -2994,7 +2994,7 @@
       <!-- Interaction -->
       <div class="prop-group">
         <div class="prop-group-title">Interaction</div>
-        <div class="prop"><span class="prop-name">bAllowTethering</span><span class="prop-type">bool</span><span class="prop-desc">Allow this cable to be auto-tethered by CableInteractionComponent. Manual TetherToWrappingCable() still works when false. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bAllowTethering</span><span class="prop-type">bool</span><span class="prop-desc">Whether Tether Component can tether to this cable. Manual TetherToWrappingCable() still works when false. Default false.</span></div>
         <div class="prop"><span class="prop-name">bClimbable</span><span class="prop-type">bool</span><span class="prop-desc">Whether this cable can be climbed via Climb Component. Default false.</span></div>
         <div class="prop"><span class="prop-name">bGrabbable</span><span class="prop-type">bool</span><span class="prop-desc">Whether this cable can be grabbed. Default true.</span></div>
         <div class="prop"><span class="prop-name">bClampGrabToLength</span><span class="prop-type">bool</span><span class="prop-desc"><strong>Clamp Grab to Cable Length</strong> - Clamp the grab anchor position so the cable path never exceeds CableLength. Only affects the grab point on the cable, NOT the player. For player push-back, use Pull Back When Taut. Default true.</span></div>
@@ -3105,16 +3105,6 @@
           </div>
         </div>
         <div class="bp-node-desc">Tension ratio: taut path length / cable length. 0 = fully slack, 1 = fully taut. Pure.</div>
-      </div>
-
-      <div class="bp-node-block">
-        <div class="bp-node pure">
-          <div class="bp-node-header"><span class="bp-node-title">Get Current LOD Tier</span></div>
-          <div class="bp-node-body">
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-enum)"></div><span class="bp-pin-label">Return Value</span></div></div>
-          </div>
-        </div>
-        <div class="bp-node-desc">Current LOD tier (Full, Medium, Low, or Sleeping). Use for debug queries or custom LOD logic. Pure.</div>
       </div>
 
       <!-- Grab Functions -->
@@ -3521,8 +3511,8 @@
         If the ride tether rope clips into your camera, configure these on the rider's <strong>Tether Component</strong> (not the cable):
         <strong>PlayerAttachSocket</strong> - attach the rope to a hand bone instead of the actor origin.
         <strong>PlayerAttachOffset</strong> - offset the rope origin away from the camera (e.g. down and forward).
-        <strong>PlayerNozzleParticles</strong> (Link Cable | Nozzle, Advanced) - add 2-4 rigid segments at the player end to keep the rope stiff and predictable near the body.
-        <strong>PlayerBodyRadius</strong> (Link Cable | Nozzle, Advanced) - invisible sphere that pushes rope particles away from the player.
+        <strong>PlayerNozzleParticles</strong> (Tether | Nozzle, Advanced) - add 2-4 rigid segments at the player end to keep the rope stiff and predictable near the body.
+        <strong>PlayerBodyRadius</strong> (Tether | Nozzle, Advanced) - invisible sphere that pushes rope particles away from the player.
       </div>
 
       <div class="prop-group">
@@ -3537,7 +3527,7 @@
         <div class="prop"><span class="prop-name">bRideAutoDirection</span><span class="prop-type">bool</span><span class="prop-desc">Ride toward whichever cable end is farther from player. Default true.</span></div>
         <div class="prop"><span class="prop-name">bRideGravityInfluence</span><span class="prop-type">bool</span><span class="prop-desc">Downhill speeds up, uphill slows down. Default true.</span></div>
         <div class="prop"><span class="prop-name">bRideSlowAtEnds</span><span class="prop-type">bool</span><span class="prop-desc">Decelerate near cable endpoints. Default true.</span></div>
-        <div class="prop"><span class="prop-name">bShowRideTether</span><span class="prop-type">bool</span><span class="prop-desc">Show a visible tether rope from the rider to the cable while riding. Requires the riding character to have a Tether Component. To adjust rope origin, camera clipping, or nozzle, configure PlayerAttachSocket, PlayerAttachOffset, PlayerNozzleParticles, and PlayerBodyRadius on the rider's <strong>Tether Component</strong> (Tether and Link Cable | Nozzle categories). Default true.</span></div>
+        <div class="prop"><span class="prop-name">bShowRideTether</span><span class="prop-type">bool</span><span class="prop-desc">Show a visible tether rope from the rider to the cable while riding. Requires the riding character to have a Tether Component. To adjust rope origin, camera clipping, or nozzle, configure PlayerAttachSocket, PlayerAttachOffset, PlayerNozzleParticles, and PlayerBodyRadius on the rider's <strong>Tether Component</strong> (Tether and Tether | Nozzle categories). Default true.</span></div>
         <div class="prop"><span class="prop-name">RideSlideSpeed</span><span class="prop-type">float</span><span class="prop-desc">Manual slide input speed while riding (cm/s). Used with AddRideSlideInput. Default 500.</span></div>
       </div>
 
@@ -3751,7 +3741,7 @@
       </div>
 
       <div class="prop-group">
-        <div class="prop-group-title">Link Cable</div>
+        <div class="prop-group-title">Tether | Rope</div>
         <div class="prop"><span class="prop-name">LinkCableMesh</span><span class="prop-type">Static Mesh</span><span class="prop-desc">Mesh for link cable segments. Null = engine cylinder.</span></div>
         <div class="prop"><span class="prop-name">LinkCableMeshScale</span><span class="prop-type">Vector 2D</span><span class="prop-desc">Cross-section scale. Default (0.3, 0.3).</span></div>
         <div class="prop"><span class="prop-name">LinkCableSegments</span><span class="prop-type">Integer</span><span class="prop-desc">Number of segments. Default 6.</span></div>
@@ -3769,7 +3759,7 @@
       </div>
 
       <div class="prop-group">
-        <div class="prop-group-title">Link Cable | Nozzle</div>
+        <div class="prop-group-title">Tether | Nozzle</div>
         <div class="prop"><span class="prop-name">PlayerNozzleParticles</span><span class="prop-type">Integer</span><span class="prop-desc">Rigid particles at the player end, forming a stiff nozzle section. 0-6. Default 0. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">PlayerNozzleDirection</span><span class="prop-type">Vector</span><span class="prop-desc">Direction of the rigid nozzle in character-local space. (0,0,-1) = straight down. Uses camera rotation when bPlayerNozzleFollowCamera is true. Default (0,0,-1). <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">bPlayerNozzleFollowCamera</span><span class="prop-type">bool</span><span class="prop-desc">When true, the player nozzle direction rotates with the camera instead of the character. Default false. <span class="tag tag-adv">Advanced</span></span></div>
@@ -3780,10 +3770,9 @@
       </div>
 
       <div class="prop-group">
-        <div class="prop-group-title">Link Cable | Endpoint Meshes</div>
+        <div class="prop-group-title">Tether | Endpoint Meshes</div>
         <div class="prop"><span class="prop-name">LinkAttachMesh</span><span class="prop-type">Static Mesh</span><span class="prop-desc">Mesh displayed at the attach point (where the link cable meets the target). Null = no indicator.</span></div>
         <div class="prop"><span class="prop-name">LinkAttachMeshMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material override for the attach-point mesh (slot 0).</span></div>
-        <div class="prop"><span class="prop-name">LinkAttachMeshAdditionalMaterials</span><span class="prop-type">Material[]</span><span class="prop-desc">Additional material overrides for the attach-point mesh (slot 1+).</span></div>
         <div class="prop"><span class="prop-name">LinkAttachMeshScale</span><span class="prop-type">Vector</span><span class="prop-desc">Scale of the attach-point mesh. Default (1,1,1).</span></div>
         <div class="prop"><span class="prop-name">bOrientAttachMeshAlongCable</span><span class="prop-type">bool</span><span class="prop-desc">Orient along the main cable's tangent when tethered to a cable. Default false. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">LinkAttachOffset</span><span class="prop-type">Vector</span><span class="prop-desc">World-space offset applied to the link cable's attach endpoint. Default (0,0,0). <span class="tag tag-adv">Advanced</span></span></div>
@@ -3791,13 +3780,12 @@
         <div class="prop"><span class="prop-name">LinkAttachMeshRotationOffset</span><span class="prop-type">Rotator</span><span class="prop-desc">Rotation offset on top of auto-orientation. Default (0,0,0). <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">LinkPlayerMesh</span><span class="prop-type">Static Mesh</span><span class="prop-desc">Mesh displayed at the player end of the link cable. Null = no indicator.</span></div>
         <div class="prop"><span class="prop-name">LinkPlayerMeshMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material override for the player-end mesh (slot 0).</span></div>
-        <div class="prop"><span class="prop-name">LinkPlayerMeshAdditionalMaterials</span><span class="prop-type">Material[]</span><span class="prop-desc">Additional material overrides for the player-end mesh (slot 1+).</span></div>
         <div class="prop"><span class="prop-name">LinkPlayerMeshScale</span><span class="prop-type">Vector</span><span class="prop-desc">Scale of the player-end mesh. Default (1,1,1).</span></div>
         <div class="prop"><span class="prop-name">LinkPlayerMeshRotationOffset</span><span class="prop-type">Rotator</span><span class="prop-desc">Rotation offset for the player-end mesh. Default (0,0,0). <span class="tag tag-adv">Advanced</span></span></div>
       </div>
 
       <div class="prop-group">
-        <div class="prop-group-title">Link Cable | Connect Animation</div>
+        <div class="prop-group-title">Tether | Connect Animation</div>
         <div class="prop"><span class="prop-name">bExtendOnConnect</span><span class="prop-type">bool</span><span class="prop-desc">Visual extend animation on connect. Default false.</span></div>
         <div class="prop"><span class="prop-name">ExtendOnConnectSpeed</span><span class="prop-type">float</span><span class="prop-desc">Extension speed in units/sec. Default 500.</span></div>
         <div class="prop"><span class="prop-name">bIsExtending</span><span class="prop-type">bool</span><span class="prop-desc">True while extend animation is playing. <span class="tag tag-ro">Read-Only</span></span></div>
@@ -3805,7 +3793,7 @@
       </div>
 
       <div class="prop-group">
-        <div class="prop-group-title">Link Cable | Disconnect Animation</div>
+        <div class="prop-group-title">Tether | Disconnect Animation</div>
         <div class="prop"><span class="prop-name">bRetractOnDisconnect</span><span class="prop-type">bool</span><span class="prop-desc">Visual retract animation on disconnect. Default false.</span></div>
         <div class="prop"><span class="prop-name">RetractSpeed</span><span class="prop-type">float</span><span class="prop-desc">Retraction speed in units/sec. Default 500.</span></div>
         <div class="prop"><span class="prop-name">bIsRetracting</span><span class="prop-type">bool</span><span class="prop-desc">True while retract animation is playing. <span class="tag tag-ro">Read-Only</span></span></div>
@@ -4090,6 +4078,7 @@
         <div class="prop"><span class="prop-name">NearestParticleIndex</span><span class="prop-type">Integer</span><span class="prop-desc"><span class="cable-only">Cable Actor</span> Particle index on nearest cable. <span class="tag tag-ro">Read-Only</span></span></div>
         <div class="prop"><span class="prop-name">NearestDistance</span><span class="prop-type">float</span><span class="prop-desc">Distance to nearest cable (world distance or aim ray offset). <span class="tag tag-ro">Read-Only</span></span></div>
         <div class="prop"><span class="prop-name">bIsGrabbing</span><span class="prop-type">bool</span><span class="prop-desc">Whether currently grabbing a cable. <span class="tag tag-ro">Read-Only</span></span></div>
+        <div class="prop"><span class="prop-name">bNearestIsPin</span><span class="prop-type">bool</span><span class="prop-desc">True when the detected point is at a pin mesh (player is aiming at or near a pin). Check this to decide between grab vs unpin. <span class="tag tag-ro">Read-Only</span></span></div>
         <div class="prop"><span class="prop-name">GrabbedCable</span><span class="prop-type">Cable Actor</span><span class="prop-desc"><span class="cable-only">Cable Actor</span> Cable currently grabbed. <span class="tag tag-ro">Read-Only</span></span></div>
         <div class="prop"><span class="prop-name">GrabPoint</span><span class="prop-type">Vector</span><span class="prop-desc">World position of grab point. <span class="tag tag-ro">Read-Only</span></span></div>
         <div class="prop"><span class="prop-name">GrabbedParticleIndex</span><span class="prop-type">Integer</span><span class="prop-desc"><span class="cable-only">Cable Actor</span> Index of grabbed particle. <span class="tag tag-ro">Read-Only</span></span></div>
@@ -4888,6 +4877,17 @@
           </div>
         </div>
         <div class="bp-node-desc">Pull a specific actor toward the owner. Returns false if the actor has no simulating physics body or is too heavy.</div>
+      </div>
+
+      <div class="bp-node-block">
+        <div class="bp-node pure">
+          <div class="bp-node-header"><span class="bp-node-title">Can Pull Actor</span></div>
+          <div class="bp-node-body">
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-bool)"></div><span class="bp-pin-label">Return Value</span></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target Actor</span></div><div class="bp-pin-spacer"></div></div>
+          </div>
+        </div>
+        <div class="bp-node-desc">Check if an actor can be pulled (has a simulating physics body and is within mass limit). Pure.</div>
       </div>
 
       <div class="bp-node-block">
@@ -6608,9 +6608,101 @@
         <div class="prop"><span class="prop-name">CableSolverIterations</span><span class="prop-type">Integer</span><span class="prop-desc">Solver iterations per substep (higher = stiffer cable, less sag). Default 6.</span></div>
         <div class="prop"><span class="prop-name">CableDamping</span><span class="prop-type">float</span><span class="prop-desc">Velocity damping (0 = no damping, 1 = full damping). Lower values let cables swing more. Default 0.1.</span></div>
         <div class="prop"><span class="prop-name">CableSubstepCount</span><span class="prop-type">Integer</span><span class="prop-desc">Substeps per tick. Higher = more stable with fast endpoints but weakens effective gravity. Default 1.</span></div>
-        <div class="prop"><span class="prop-name">CableSleepDistance</span><span class="prop-type">float</span><span class="prop-desc">Distance from camera before cable sleeps (0 = never sleep). Default 0.</span></div>
+        <div class="prop"><span class="prop-name">CableSleepDistance</span><span class="prop-type">float</span><span class="prop-desc">Distance from camera before cable sleeps (0 = auto-calculate from cable length). Default 0.</span></div>
         <div class="prop"><span class="prop-name">bCableEnableLODTiers</span><span class="prop-type">bool</span><span class="prop-desc">Graduated LOD. Default true.</span></div>
         <div class="prop"><span class="prop-name">bCableCastShadow</span><span class="prop-type">bool</span><span class="prop-desc">Shadow casting. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bCableReceiveDecals</span><span class="prop-type">bool</span><span class="prop-desc">Whether spawned cables receive decals. Default true. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableCollisionChannel</span><span class="prop-type">Collision Channel</span><span class="prop-desc">Collision trace channel for world collision queries. Default WorldStatic. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableCollisionFriction</span><span class="prop-type">float</span><span class="prop-desc">Surface friction when cable slides on geometry (0-1). Default 0.3. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableDriftSmoothness</span><span class="prop-type">float</span><span class="prop-desc">How smooth the drift waves are along the cable. Higher = smoother. Default 8.0. <span class="tag tag-adv">Advanced</span></span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Wind</div>
+        <div class="prop"><span class="prop-name">bCableUseWorldWind</span><span class="prop-type">bool</span><span class="prop-desc">Cable particles are affected by Wind Directional Source actors in the scene. Default false.</span></div>
+        <div class="prop"><span class="prop-name">CableWorldWindScale</span><span class="prop-type">float</span><span class="prop-desc">Multiplier on the wind force from scene wind sources. Default 1.0.</span></div>
+        <div class="prop"><span class="prop-name">CableWindTurbulence</span><span class="prop-type">float</span><span class="prop-desc">Per-particle wind variation for organic look. Default 0.5. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableWindTurbulenceFrequency</span><span class="prop-type">float</span><span class="prop-desc">How fast the wind turbulence pattern changes. Default 1.5. <span class="tag tag-adv">Advanced</span></span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Appearance</div>
+        <div class="prop"><span class="prop-name">AdditionalCableMaterials</span><span class="prop-type">Material[]</span><span class="prop-desc">Additional material slots for multi-material cable meshes (slot 1, 2, ...).</span></div>
+        <div class="prop"><span class="prop-name">CableFlowTiling</span><span class="prop-type">float</span><span class="prop-desc">How many times the UV tiles along the cable length. Controls texture repetition. Default 1.0.</span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Tension Material</div>
+        <div class="prop"><span class="prop-name">bCableDriveMaterialTension</span><span class="prop-type">bool</span><span class="prop-desc">Drive a scalar material parameter based on cable tension ratio. Default false.</span></div>
+        <div class="prop"><span class="prop-name">CableTensionParameterName</span><span class="prop-type">Name</span><span class="prop-desc">Name of the scalar parameter on the cable material to drive with tension. Default "Tension". <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableTensionRemapMin</span><span class="prop-type">float</span><span class="prop-desc">Tension below this value maps to 0 in the material. Default 0.0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableTensionRemapMax</span><span class="prop-type">float</span><span class="prop-desc">Tension at this value maps to 1 in the material. Default 1.0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableTensionCurve</span><span class="prop-type">float</span><span class="prop-desc">Response curve exponent after tension remap. >1 = sharper onset, &lt;1 = gradual. Default 1.0. <span class="tag tag-adv">Advanced</span></span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Distance Scale</div>
+        <div class="prop"><span class="prop-name">CableMinDistanceScale</span><span class="prop-type">float</span><span class="prop-desc">Minimum thickness multiplier floor for distance scaling. Default 1.0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableMaxDistanceScale</span><span class="prop-type">float</span><span class="prop-desc">Maximum thickness multiplier ceiling for distance scaling. Default 5.0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableDistanceScaleReference</span><span class="prop-type">float</span><span class="prop-desc">Reference distance at which CableMeshScale is used unmodified (0 = auto). Default 0. <span class="tag tag-adv">Advanced</span></span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Interaction</div>
+        <div class="prop"><span class="prop-name">bCableActive</span><span class="prop-type">bool</span><span class="prop-desc">Whether spawned cables start active (gameplay flag for powered/energized state). Default true.</span></div>
+        <div class="prop"><span class="prop-name">bCableClimbable</span><span class="prop-type">bool</span><span class="prop-desc">Whether spawned cables can be climbed via Climb Component. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bCableAllowTethering</span><span class="prop-type">bool</span><span class="prop-desc">Allow spawned cables to be auto-tethered by Cable Interaction Component. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bCableAllowGrabbing</span><span class="prop-type">bool</span><span class="prop-desc">Whether players can grab spawned cables via Cable Interaction Component. Default true.</span></div>
+        <div class="prop"><span class="prop-name">bCableAllowPinning</span><span class="prop-type">bool</span><span class="prop-desc">Whether spawned cables can be pinned at runtime. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bCableAllowUnpinning</span><span class="prop-type">bool</span><span class="prop-desc">Whether pins can be removed from spawned cables at runtime. Default true.</span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | End Caps</div>
+        <div class="prop"><span class="prop-name">CableEndCapMesh</span><span class="prop-type">Static Mesh</span><span class="prop-desc">Mesh for cable endpoints (connector/plug).</span></div>
+        <div class="prop"><span class="prop-name">CableEndCapMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material for end cap meshes.</span></div>
+        <div class="prop"><span class="prop-name">CableEndCapScale</span><span class="prop-type">Vector</span><span class="prop-desc">Scale of end cap meshes. Default (1,1,1).</span></div>
+        <div class="prop"><span class="prop-name">CableEndCapRotationOffset</span><span class="prop-type">Rotator</span><span class="prop-desc">Rotation offset on top of auto-orientation for end caps. Default (0,0,0). <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableSealCapMesh</span><span class="prop-type">Static Mesh</span><span class="prop-desc">Mesh to seal hollow cable ends at free/cut endpoints. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableSealCapMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material for seal cap meshes. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableSealCapInset</span><span class="prop-type">float</span><span class="prop-desc">How far seal caps are pushed into the cable end (world units). Default 5.0. <span class="tag tag-adv">Advanced</span></span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Cutting</div>
+        <div class="prop"><span class="prop-name">bCableAllowCutting</span><span class="prop-type">bool</span><span class="prop-desc">Whether spawned cables can be cut at runtime. Default false.</span></div>
+        <div class="prop"><span class="prop-name">CableCutImpulseStrength</span><span class="prop-type">float</span><span class="prop-desc">Random velocity injected into particles when cable is cut. Default 10.0.</span></div>
+        <div class="prop"><span class="prop-name">CableMinCutParticles</span><span class="prop-type">Integer</span><span class="prop-desc">Minimum particles per piece after cutting. Default 3. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableCutOffMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material applied to the cut-off tail cable.</span></div>
+        <div class="prop"><span class="prop-name">CablePostCutMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material the remaining (head) cable switches to after being cut.</span></div>
+        <div class="prop"><span class="prop-name">bCableAutoDestroyCutPieces</span><span class="prop-type">bool</span><span class="prop-desc">Automatically destroy cut-off cable pieces after a delay. Default false.</span></div>
+        <div class="prop"><span class="prop-name">CableAutoDestroyDelay</span><span class="prop-type">float</span><span class="prop-desc">Seconds before a cut-off piece is destroyed. Default 5.0.</span></div>
+        <div class="prop"><span class="prop-name">bCableOnlyDestroyUnattached</span><span class="prop-type">bool</span><span class="prop-desc">Only auto-destroy cut pieces where neither end is attached. Default true. <span class="tag tag-adv">Advanced</span></span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Regrow</div>
+        <div class="prop"><span class="prop-name">bCableRegrowAfterCut</span><span class="prop-type">bool</span><span class="prop-desc">Regrow the cable back to its original length after being cut. Default false.</span></div>
+        <div class="prop"><span class="prop-name">CableRegrowSpeed</span><span class="prop-type">float</span><span class="prop-desc">How fast the cable regrows (world units/sec). Default 200.</span></div>
+        <div class="prop"><span class="prop-name">CableRegrowDelay</span><span class="prop-type">float</span><span class="prop-desc">Seconds to wait before regrowing starts after a cut. Default 1.0.</span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | Rideable</div>
+        <div class="prop"><span class="prop-name">bCableRideable</span><span class="prop-type">bool</span><span class="prop-desc">Whether spawned cables are rideable (zipline). Default false.</span></div>
+        <div class="prop"><span class="prop-name">CableRideSpeed</span><span class="prop-type">float</span><span class="prop-desc">Base travel speed along the cable (cm/s). Default 800.</span></div>
+        <div class="prop"><span class="prop-name">CableRideHangDistance</span><span class="prop-type">float</span><span class="prop-desc">How far below the cable the rider hangs (cm). Default 350.</span></div>
+      </div>
+
+      <div class="prop-group">
+        <div class="prop-group-title">Cable Defaults | LOD Details</div>
+        <div class="prop"><span class="prop-name">CableNumOverlapCapsules</span><span class="prop-type">Integer</span><span class="prop-desc">Number of overlap capsules placed along each cable for spatial queries. Default 4. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableLODMediumDistance</span><span class="prop-type">float</span><span class="prop-desc">Distance for Medium LOD tier (0 = auto from sleep distance). Default 0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableLODLowDistance</span><span class="prop-type">float</span><span class="prop-desc">Distance for Low LOD tier (0 = auto from sleep distance). Default 0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableLODMediumVisualSegments</span><span class="prop-type">Integer</span><span class="prop-desc">Visual segments at Medium LOD (0 = auto). Default 0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CableLODLowVisualSegments</span><span class="prop-type">Integer</span><span class="prop-desc">Visual segments at Low LOD (0 = auto). Default 0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">bCableHideVisualsAtLow</span><span class="prop-type">bool</span><span class="prop-desc">Hide cable visuals entirely at Low LOD tier. Default true. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">bCableDisableShadowsAtLowLOD</span><span class="prop-type">bool</span><span class="prop-desc">Disable shadow casting at Low and Sleeping LOD tiers. Default true. <span class="tag tag-adv">Advanced</span></span></div>
       </div>
 
       <h3>Functions</h3>
