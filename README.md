@@ -2,7 +2,7 @@
 
 Documentation for the RAC plugin for Unreal Engine.
 
-**[View Documentation](https://rt-assets.github.io/rac-docs)**
+**[View Documentation](https://rt-assets.github.io/rac-docs)** | **[Quick Start](https://rt-assets.github.io/rac-docs/RAC_QuickStart.html)**
 
 ## About
 

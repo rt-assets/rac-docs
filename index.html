@@ -7401,7 +7401,9 @@
   /* ---- Smooth scroll on nav click ---- */
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
+      const href = link.getAttribute('href');
       if (link.getAttribute('target') === '_blank') return;
+      if (!href || !href.startsWith('#')) return;
       e.preventDefault();
       const target = document.querySelector(link.getAttribute('href'));
       if (target) {
