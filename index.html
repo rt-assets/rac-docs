@@ -1430,81 +1430,6 @@
     color: #8a8b92;
   }
 
-  /* ---- Quick Start recipe cards ---- */
-  .recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  .recipe-card {
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem 1.15rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-  }
-  .recipe-card:hover {
-    border-color: var(--border-light);
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
-  }
-  .recipe-card:nth-child(1)  { background: rgba(212,133,74,0.06);  border-color: rgba(212,133,74,0.15); }
-  .recipe-card:nth-child(2)  { background: rgba(107,184,212,0.06); border-color: rgba(107,184,212,0.15); }
-  .recipe-card:nth-child(3)  { background: rgba(91,154,104,0.06);  border-color: rgba(91,154,104,0.15); }
-  .recipe-card:nth-child(4)  { background: rgba(196,148,56,0.06);  border-color: rgba(196,148,56,0.15); }
-  .recipe-card:nth-child(5)  { background: rgba(169,154,224,0.06); border-color: rgba(169,154,224,0.15); }
-  .recipe-card:nth-child(6)  { background: rgba(56,152,216,0.06);  border-color: rgba(56,152,216,0.15); }
-  .recipe-card:nth-child(7)  { background: rgba(239,121,52,0.06);  border-color: rgba(239,121,52,0.15); }
-  .recipe-card:nth-child(8)  { background: rgba(28,188,156,0.06);  border-color: rgba(28,188,156,0.15); }
-  .recipe-card:nth-child(9)  { background: rgba(59,155,107,0.06);  border-color: rgba(59,155,107,0.15); }
-  .recipe-card:nth-child(10) { background: rgba(142,0,8,0.08);     border-color: rgba(142,0,8,0.18); }
-  .recipe-card:nth-child(11) { background: rgba(152,176,248,0.06); border-color: rgba(152,176,248,0.15); }
-  .recipe-card h3 {
-    font-size: 0.95rem;
-    margin: 0 0 0.6rem 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .recipe-icon {
-    font-size: 1.1rem;
-    width: 1.6rem;
-    height: 1.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    background: var(--accent-dim);
-    flex-shrink: 0;
-  }
-  .recipe-card ol {
-    margin: 0;
-    padding-left: 1.15rem;
-    font-size: 0.85rem;
-    color: var(--text);
-    line-height: 1.6;
-    flex: 1;
-  }
-  .recipe-card ol li {
-    padding: 0.1rem 0;
-  }
-  .recipe-card ol li::marker {
-    color: var(--accent);
-    font-weight: 700;
-    font-size: 0.78rem;
-  }
-  .recipe-steps-badge {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .recipe-grid {
-      grid-template-columns: 1fr;
-    }
-  }
 </style>
 </head>
 <body>
@@ -1537,7 +1462,7 @@
       <a href="#overview" class="nav-link active">Overview</a>
       <a href="#installation" class="nav-link">Installation</a>
       <a href="#placing-cables" class="nav-link">Placing Cables</a>
-      <a href="#quick-start" class="nav-link">Quick Start</a>
+      <a href="RAC_QuickStart.html" class="nav-link">Quick Start</a>
       <a href="#cable-cutting" class="nav-link">Cable Cutting</a>
       <a href="#performance" class="nav-link">Performance Tips</a>
       <a href="#editor-visualizer" class="nav-link">Editor Visualizer</a>
@@ -1599,6 +1524,7 @@
       <p class="page-desc">
         A physics cable and rope toolkit for Unreal Engine. Verlet simulation, surface draping, player interaction, tethering, riding, swinging, climbing, and towing - all from Blueprint.
       </p>
+      <p style="margin-top: 0.5rem;"><a href="RAC_QuickStart.html" style="color: var(--accent); text-decoration: none; font-weight: 500;">Quick Start Guide &rarr;</a></p>
 
       <div class="specs">
         <span class="spec-label">Plugin Type</span> <span class="spec-value">Runtime</span>
@@ -1722,145 +1648,10 @@
           <tr><td><strong>Place Actors</strong></td><td>Open the Place Actors panel (or right-click the viewport) and search for <code>Cable Actor</code>, <code>Wrapping Cable</code>, or <code>Zipline Cable</code>. Drag into the viewport, then set <code>AttachStartTo</code> / <code>AttachEndTo</code> in the Details panel to connect endpoints to other actors.</td><td>Hand-placed static cables, one at a time</td></tr>
           <tr><td><strong><a href="#cable-placement">Placement Tool</a></strong></td><td>Activate <strong>RAC Cable Placement</strong> from the Modes dropdown. Click to route cables visually - click-click to chain.</td><td>Hand-routing cable runs through a level</td></tr>
           <tr><td><strong><a href="#cable-point">Cable Points</a></strong></td><td>Add <code>Cable Point Components</code> to actors. Nearby points auto-detect each other and spawn cables on Play. Set one as <code>bIsCableParent</code> to flow defaults to the whole group.</td><td>Cable networks, webs, procedural setups</td></tr>
-          <tr><td><strong><a href="#quick-start">Runtime spawn</a></strong></td><td>Call <code>SpawnCableBetween()</code> from the <a href="#tether-utils">Tether Utils</a> library at runtime in Blueprint or C++.</td><td>Gameplay-driven cables (grapple, tow, etc.)</td></tr>
+          <tr><td><strong><a href="#tether-utils">Runtime spawn</a></strong></td><td>Call <code>SpawnCableBetween()</code> from the <a href="#tether-utils">Tether Utils</a> library at runtime in Blueprint or C++.</td><td>Gameplay-driven cables (grapple, tow, etc.)</td></tr>
         </tbody>
       </table>
       <p>All methods produce the same <code>Cable Actor</code> or <code>Wrapping Cable</code> - they just differ in when and how the cable is created. You can mix and match freely.</p>
-    </div>
-
-    <hr>
-
-    <!-- ============ QUICK START ============ -->
-    <div class="section" id="quick-start">
-      <h2>Quick Start</h2>
-
-
-      <div class="recipe-grid">
-
-        <div class="recipe-card">
-          <h3>Hanging Cable<span class="recipe-steps-badge">3 steps</span></h3>
-          <ol>
-            <li>Place two actors in your level (any actor works)</li>
-            <li>Add a <code>Cable Point Component</code> to each actor</li>
-            <li>Hit Play. Nearby Cable Points auto-detect each other and spawn a cable between them. Or add the other actor to <code>ManualConnectionActors</code> for an explicit connection.</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Cable Web<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>Place several actors with <code>Cable Point Components</code></li>
-            <li>Make sure <code>bAutoConnectNearby</code> is on (default) and they share the same <code>CableChannel</code></li>
-            <li>Adjust <code>AutoConnectRadius</code> and <code>MaxAutoConnections</code> as needed</li>
-            <li>Hit Play. Cables auto-generate between nearby points. Set one point as <code>bIsCableParent</code> to flow its Cable Defaults to the entire network.</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Player Tether<span class="recipe-steps-badge">6 steps</span></h3>
-          <ol>
-            <li>Add a <code>Tether Component</code> to your player character</li>
-            <li>Place <code>Cable</code> actors, <code>Wrapping Cable</code> actors, or <code>Tether Point</code> actors in your level</li>
-            <li>Call <code>TetherToCable(Cable)</code>, <code>TetherToWrappingCable(Cable)</code>, <code>TetherToActor(Actor)</code>, or <code>TetherToPoint(WorldPos)</code> to connect</li>
-            <li>A visual link cable appears between the player and the target</li>
-            <li>Customize the link cable look with <code>LinkCableMesh</code>, <code>LinkCableMaterial</code>, attach meshes, etc.</li>
-            <li>Call <code>Detach()</code> to disconnect</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Runtime Pinning<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>On your <code>Cable</code> actor, find the <code>VerletCable</code> child component in the Details panel and set <code>bAllowPinning</code> = true</li>
-            <li>Add a <code>Cable Interaction Component</code> to your player character (set <code>DetectionMode</code> to Proximity or Aim)</li>
-            <li>Call <code>PinNearestCable()</code> - finds the nearest cable, pins the closest particle, returns the index</li>
-            <li>Pins act as pulleys: rope slides through them, tension equalizes across sections</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Zipline<span class="recipe-steps-badge">3 steps</span></h3>
-          <ol>
-            <li>Place a <code>Zipline Cable</code> in your level (a Cable Actor with ride physics pre-enabled)</li>
-            <li>In your player Blueprint, call <code>StartRiding(Character)</code> on the Zipline Cable</li>
-            <li>The player rides along the cable with auto-direction and gravity influence</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Rope Swing<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>Add a <code>Swing Component</code> to the actor that controls your swing points (e.g. player character or a swing manager)</li>
-            <li>In your player Blueprint, call <code>StartSwinging(PlayerCharacter)</code> - it fires an aim trace from the camera and spawns a grapple rope to the hit point</li>
-            <li>Use <code>AddPumpInput()</code> each tick from input to pump the swing. Call <code>StopSwinging()</code> to release with a launch</li>
-            <li>Or use <code>StartSwingingAtPoint(Character, PivotPoint)</code> to swing from an explicit world position</li>
-          </ol>
-        </div>
-
-
-        <div class="recipe-card">
-          <h3>Wrapping Cable<span class="recipe-steps-badge">5 steps</span></h3>
-          <ol>
-            <li>Place a <code>Wrapping Cable</code> actor in your level</li>
-            <li>Set <code>AttachStartTo</code> and <code>AttachEndTo</code> to two actors (or use <code>AttachStartOffset</code> / <code>AttachEndOffset</code> for positions)</li>
-            <li>Assign a <code>CableMesh</code> and <code>CableMaterial</code> under Appearance</li>
-            <li>Hit Play. The cable sags between endpoints and automatically wraps around any geometry it touches</li>
-            <li>To let the player grab it, add a <code>Cable Interaction Component</code> to the character and call <code>GrabCable()</code></li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Sweep Cut<span class="recipe-steps-badge">5 steps</span></h3>
-          <ol>
-            <li>Add a <code>Cable Interaction Component</code> to your character</li>
-            <li>Set <code>bAllowCutting = true</code> on each cable's Verlet component</li>
-            <li>On attack start, call <code>StartSweepCut()</code>. On attack end, call <code>StopSweepCut()</code></li>
-            <li>Cables that enter the sweep radius while the player moves are sliced automatically</li>
-            <li>Tune <code>SweepCutRadius</code> for blade width and <code>MaxSweepCutsPerFrame</code> to limit frame spikes in dense clusters</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Spawn at Runtime<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>Call <code>SpawnCableBetween(StartActor, EndActor)</code> from the <code>Tether Utils</code> library</li>
-            <li>CableLength 0 = auto-calculate with 20% slack. NumSegments 0 = auto-calculate from distance</li>
-            <li>Pass <code>null</code> for EndActor and use <code>EndOffset</code> as an absolute world position to spawn a cable to an arbitrary point</li>
-            <li>Returns the spawned <code>Cable Actor</code> - store the reference for later manipulation</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Vehicle Towing<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>Add a <code>Tow Component</code> to the vehicle that tows (truck, crane, etc.)</li>
-            <li>Add a <code>Tow Target Component</code> to anything that can be towed. Set <code>AttachSocket</code> for a precise hitch point</li>
-            <li>Call <code>AttachTowToNearest()</code> or <code>AttachTow(TargetActor)</code> to connect. A physics cable spawns between them</li>
-            <li>Tune <code>TowStiffness</code>, <code>TowDamping</code>, and <code>BreakForce</code> under Tow Physics. Bind <code>OnTowBroken</code> for break events</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Pull Physics Objects<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>Add a <code>Pull Component</code> to your player character</li>
-            <li>Call <code>StartPulling(PlayerCharacter)</code> - it fires an aim trace from the camera and attaches a rope to the first physics object hit</li>
-            <li>The target is pulled toward the player automatically. <code>OnPullArrived</code> fires when it reaches you</li>
-            <li>Set <code>MassLimit</code> to filter out objects too heavy. <code>OnPullFailed</code> fires with the reason (NoHit, NotSimulating, TooHeavy)</li>
-          </ol>
-        </div>
-
-        <div class="recipe-card">
-          <h3>Rope Climbing<span class="recipe-steps-badge">4 steps</span></h3>
-          <ol>
-            <li>Add a <code>Climb Component</code> to your player character</li>
-            <li>On the cable, set <code>bClimbable = true</code></li>
-            <li>Call <code>StartClimbing(PlayerCharacter)</code> - it fires an aim trace and grabs the nearest climbable cable</li>
-            <li>Feed input with <code>AddClimbInput(Value)</code> each tick. Positive = up, negative = down. Gravity pulls the player down when idle. Call <code>StopClimbing()</code> to release with a launch</li>
-          </ol>
-        </div>
-
-      </div>
     </div>
 
     <hr>
