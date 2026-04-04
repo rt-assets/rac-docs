@@ -2402,7 +2402,7 @@
         <div class="prop"><span class="prop-name">EndCapScale</span><span class="prop-type">Vector</span><span class="prop-desc">End cap scale. Default (1,1,1).</span></div>
         <div class="prop"><span class="prop-name">EndCapRotationOffset</span><span class="prop-type">Rotator</span><span class="prop-desc">Rotation offset for end cap meshes.</span></div>
         <div class="prop"><span class="prop-name">SealCapMesh</span><span class="prop-type">Static Mesh</span><span class="prop-desc">Mesh to seal hollow cable ends at free or cut endpoints. Default SM_RAC_HollowCylinder_CAPPED (included with plugin). Set to None to disable.</span></div>
-        <div class="prop"><span class="prop-name">SealCapMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material for seal cap meshes. Default M_RAC_EndCap.</span></div>
+        <div class="prop"><span class="prop-name">SealCapMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material for seal cap meshes. Default MI_RAC_CableType06.</span></div>
         <div class="prop"><span class="prop-name">SealCapInset</span><span class="prop-type">float</span><span class="prop-desc">How far seal caps push into the cable (along cable direction). Makes them inline seals rather than flush end caps. Default 5.</span></div>
       </div>
 
@@ -2941,7 +2941,7 @@
       <!-- Pull Back -->
       <div class="prop-group">
         <div class="prop-group-title">Pull Back</div>
-        <div class="prop"><span class="prop-name">bPullBackWhenTaut</span><span class="prop-type">bool</span><span class="prop-desc">When the cable is taut, pull the grabbing player back and prevent them from stretching it further. Applies a spring force on the grabbing character's movement component. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bPullBackWhenTaut</span><span class="prop-type">bool</span><span class="prop-desc">Apply spring forces to the player and/or endpoint actors when the cable is pulled taut. Prevents stretching beyond cable length. Default false.</span></div>
         <div class="prop"><span class="prop-name">PullBackStiffness</span><span class="prop-type">float</span><span class="prop-desc">Spring stiffness when the player exceeds cable reach. ~5 = soft, ~15 = firm, ~30+ = hard wall. Mass-compensated. Default 15.0.</span></div>
         <div class="prop"><span class="prop-name">PullBackDamping</span><span class="prop-type">float</span><span class="prop-desc">Damping along the pull direction. 0 = bouncy, ~5 = smooth. Mass-compensated. Default 8.0.</span></div>
         <div class="prop"><span class="prop-name">bPullBackOnGrab</span><span class="prop-type">bool</span><span class="prop-desc">Apply pull-back to the player when they grab the cable body (via interaction component). Disable to let the player drag the cable freely while still constraining endpoints. Default true.</span></div>
@@ -3730,8 +3730,8 @@
         <div class="prop"><span class="prop-name">bAttachOffsetInViewSpace</span><span class="prop-type">bool</span><span class="prop-desc">Rotate offset into camera local space. Default false. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">ReconnectCooldown</span><span class="prop-type">float</span><span class="prop-desc">Cooldown (seconds) after disconnect before the tether can reconnect. Gives the player time to move away. 0 = no cooldown. Default 0.</span></div>
         <div class="prop"><span class="prop-name">TetherSlideSpeed</span><span class="prop-type">float</span><span class="prop-desc">Speed for sliding the attach point along a cable (cm/s at full input). Use with SlideTetherAlongCable. Default 500.</span></div>
-        <div class="prop"><span class="prop-name">TetherSlideGravityScale</span><span class="prop-type">float</span><span class="prop-desc">How strongly gravity pulls the slide point along the cable's slope when no input is held. 0 = no gravity slide, 1 = full gravity projection. Default 0.5.</span></div>
-        <div class="prop"><span class="prop-name">TetherSlideFriction</span><span class="prop-type">float</span><span class="prop-desc">Friction opposing gravity-driven slide. Higher = more resistance. 0 = frictionless. Default 0.3.</span></div>
+        <div class="prop"><span class="prop-name">TetherSlideGravityScale</span><span class="prop-type">float</span><span class="prop-desc">How strongly gravity pulls the slide point along the cable's slope when no input is held. 0 = no gravity slide, 1 = full gravity projection. Default 1.0.</span></div>
+        <div class="prop"><span class="prop-name">TetherSlideFriction</span><span class="prop-type">float</span><span class="prop-desc">Friction opposing gravity-driven slide. Higher = more resistance. 0 = frictionless. Default 0.15.</span></div>
         <div class="prop"><span class="prop-name">TetherSlideMaxSpeed</span><span class="prop-type">float</span><span class="prop-desc">Maximum gravity-driven slide speed (cm/s). 0 = no cap. Default 600.</span></div>
         <div class="prop"><span class="prop-name">CableTrackSpeed</span><span class="prop-type">float</span><span class="prop-desc">How fast the attach point tracks along the cable when tethered. Higher = snappier following. Default 15.</span></div>
         <div class="prop"><span class="prop-name">bIsTethered</span><span class="prop-type">bool</span><span class="prop-desc">True while connected. <span class="tag tag-ro">Read-Only</span></span></div>
@@ -3750,6 +3750,7 @@
         <div class="prop"><span class="prop-name">LinkCableDamping</span><span class="prop-type">float</span><span class="prop-desc">Velocity damping. Default 0.05. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">RopeEndpointSmoothing</span><span class="prop-type">float</span><span class="prop-desc">How fast the rope endpoint tracks the player. 0 = instant (snappy but can jitter), 15-25 = smooth chase. Default 0.</span></div>
         <div class="prop"><span class="prop-name">LinkCableDriftStrength</span><span class="prop-type">float</span><span class="prop-desc">Drift strength. Default 3.0. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">bForceStraightLinkCable</span><span class="prop-type">bool</span><span class="prop-desc">Force the link cable into a perfectly straight line each frame. Useful for zipline tethers where slack looks wrong. Default false. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">MaxLinkCableLength</span><span class="prop-type">float</span><span class="prop-desc">Max link cable length. When exceeded, the tether auto-disconnects (unless bLockTether is true). 0 = unlimited. Default 0.</span></div>
         <div class="prop"><span class="prop-name">bLinkCableCanBeCut</span><span class="prop-type">bool</span><span class="prop-desc">Whether the link cable can be cut. Default false.</span></div>
         <div class="prop"><span class="prop-name">LinkCableMaterial</span><span class="prop-type">Material</span><span class="prop-desc">Material for link cable.</span></div>
@@ -3789,7 +3790,7 @@
         <div class="prop"><span class="prop-name">bExtendOnConnect</span><span class="prop-type">bool</span><span class="prop-desc">Visual extend animation on connect. Default false.</span></div>
         <div class="prop"><span class="prop-name">ExtendOnConnectSpeed</span><span class="prop-type">float</span><span class="prop-desc">Extension speed in units/sec. Default 500.</span></div>
         <div class="prop"><span class="prop-name">bIsExtending</span><span class="prop-type">bool</span><span class="prop-desc">True while extend animation is playing. <span class="tag tag-ro">Read-Only</span></span></div>
-        <div class="prop"><span class="prop-name">bExtendHideAttachMesh</span><span class="prop-type">bool</span><span class="prop-desc">Hide attach mesh during extend animation. Default true.</span></div>
+        <div class="prop"><span class="prop-name">bExtendHideAttachMesh</span><span class="prop-type">bool</span><span class="prop-desc">Hide attach mesh during extend animation. Default true. <span class="tag tag-adv">Advanced</span></span></div>
       </div>
 
       <div class="prop-group">
@@ -3797,14 +3798,14 @@
         <div class="prop"><span class="prop-name">bRetractOnDisconnect</span><span class="prop-type">bool</span><span class="prop-desc">Visual retract animation on disconnect. Default false.</span></div>
         <div class="prop"><span class="prop-name">RetractSpeed</span><span class="prop-type">float</span><span class="prop-desc">Retraction speed in units/sec. Default 500.</span></div>
         <div class="prop"><span class="prop-name">bIsRetracting</span><span class="prop-type">bool</span><span class="prop-desc">True while retract animation is playing. <span class="tag tag-ro">Read-Only</span></span></div>
-        <div class="prop"><span class="prop-name">bRetractHideAttachMesh</span><span class="prop-type">bool</span><span class="prop-desc">Hide attach mesh during retract animation. Default true.</span></div>
+        <div class="prop"><span class="prop-name">bRetractHideAttachMesh</span><span class="prop-type">bool</span><span class="prop-desc">Hide attach mesh during retract animation. Default true. <span class="tag tag-adv">Advanced</span></span></div>
       </div>
 
       <div class="prop-group">
         <div class="prop-group-title">Debug</div>
         <div class="prop"><span class="prop-name">bDrawDebugLinkLine</span><span class="prop-type">bool</span><span class="prop-desc">Draw debug lines for the link cable. Default false.</span></div>
-        <div class="prop"><span class="prop-name">DebugLinkLineColor</span><span class="prop-type">FColor</span><span class="prop-desc">Color of link cable debug lines. Default Green.</span></div>
-        <div class="prop"><span class="prop-name">bDrawDebugPlayerBody</span><span class="prop-type">bool</span><span class="prop-desc">Draw debug sphere showing player body avoidance radius. Default false.</span></div>
+        <div class="prop"><span class="prop-name">DebugLinkLineColor</span><span class="prop-type">FColor</span><span class="prop-desc">Color of link cable debug lines. Default Green. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">bDrawDebugPlayerBody</span><span class="prop-type">bool</span><span class="prop-desc">Draw debug sphere showing player body avoidance radius. Default false. <span class="tag tag-adv">Advanced</span></span></div>
       </div>
 
       <h3>Functions</h3>
@@ -3828,7 +3829,7 @@
           <div class="bp-node-body">
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-exec connected"></div></div><div class="bp-pin bp-pin-out"><div class="bp-pin-exec connected"></div></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin-spacer"></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Wrapping Cable</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Wrap Cable</span></div><div class="bp-pin-spacer"></div></div>
           </div>
         </div>
         <div class="bp-node-desc">Connect to a Wrapping Cable. Finds nearest point on the cable.</div>
@@ -4873,7 +4874,7 @@
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-exec connected"></div></div><div class="bp-pin bp-pin-out"><div class="bp-pin-exec connected"></div></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-bool)"></div><span class="bp-pin-label">Return Value</span></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Character</span></div><div class="bp-pin-spacer"></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target Actor</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin-spacer"></div></div>
           </div>
         </div>
         <div class="bp-node-desc">Pull a specific actor toward the owner. Returns false if the actor has no simulating physics body or is too heavy.</div>
@@ -4884,7 +4885,7 @@
           <div class="bp-node-header"><span class="bp-node-title">Can Pull Actor</span></div>
           <div class="bp-node-body">
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-bool)"></div><span class="bp-pin-label">Return Value</span></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target Actor</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin-spacer"></div></div>
           </div>
         </div>
         <div class="bp-node-desc">Check if an actor can be pulled (has a simulating physics body and is within mass limit). Pure.</div>
@@ -4986,10 +4987,11 @@
         <div class="prop"><span class="prop-name">MaxGrabDistance</span><span class="prop-type">float</span><span class="prop-desc">Maximum distance from the cable surface to grab (cm). If the nearest point is farther, grab fails. Default 500.</span></div>
         <div class="prop"><span class="prop-name">ClimbSpeed</span><span class="prop-type">float</span><span class="prop-desc">Speed at which the character climbs up/down when holding input (cm/s). Default 400.</span></div>
         <div class="prop"><span class="prop-name">MaxSlideSpeed</span><span class="prop-type">float</span><span class="prop-desc">Maximum gravity-driven slide speed (cm/s). 0 = no cap. Default 600.</span></div>
-        <div class="prop"><span class="prop-name">GravitySlideScale</span><span class="prop-type">float</span><span class="prop-desc">How strongly gravity pulls the character along the cable's slope. 0 = no slide, 1 = full gravity projection. Default 0.5.</span></div>
-        <div class="prop"><span class="prop-name">ClimbFriction</span><span class="prop-type">float</span><span class="prop-desc">Friction that opposes slide velocity. Higher = cable feels rougher. 0 = frictionless. Default 0.3.</span></div>
+        <div class="prop"><span class="prop-name">GravitySlideScale</span><span class="prop-type">float</span><span class="prop-desc">How strongly gravity pulls the character along the cable's slope. 0 = no slide, 1 = full gravity projection. Default 1.0.</span></div>
+        <div class="prop"><span class="prop-name">ClimbFriction</span><span class="prop-type">float</span><span class="prop-desc">Friction that opposes slide velocity. Higher = cable feels rougher. 0 = frictionless. Default 0.15.</span></div>
         <div class="prop"><span class="prop-name">ClimbOffset</span><span class="prop-type">float</span><span class="prop-desc">Distance (cm) the character stands back from the cable while climbing. 0 = right on the cable. Default 75.</span></div>
-        <div class="prop"><span class="prop-name">bSlideWhenIdle</span><span class="prop-type">bool</span><span class="prop-desc">When the player releases climb input, automatically slide down due to gravity. When false, the character holds position. Default true.</span></div>
+        <div class="prop"><span class="prop-name">bSlideWhenIdle</span><span class="prop-type">bool</span><span class="prop-desc">When the player releases climb input, automatically slide down due to gravity. When false, the character holds position. Ignored if bFreefallOnRelease is true. Default true.</span></div>
+        <div class="prop"><span class="prop-name">bFreefallOnRelease</span><span class="prop-type">bool</span><span class="prop-desc">When the player releases climb input, immediately let go of the cable and freefall. Overrides bSlideWhenIdle. Default false.</span></div>
         <div class="prop"><span class="prop-name">bLaunchOnRelease</span><span class="prop-type">bool</span><span class="prop-desc">Apply launch velocity when releasing the cable. Default true.</span></div>
         <div class="prop"><span class="prop-name">LaunchVelocityMultiplier</span><span class="prop-type">float</span><span class="prop-desc">Multiplier on current velocity when launching off the cable. Default 1.0.</span></div>
         <div class="prop"><span class="prop-name">LaunchUpwardBoost</span><span class="prop-type">float</span><span class="prop-desc">Additional upward velocity on release (cm/s). Gives a "jump off rope" feel. Default 300.</span></div>
@@ -5048,7 +5050,7 @@
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-exec connected"></div></div><div class="bp-pin bp-pin-out"><div class="bp-pin-exec connected"></div></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-bool)"></div><span class="bp-pin-label">Return Value</span></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Character</span></div><div class="bp-pin-spacer"></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Wrapping Cable</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Cable</span></div><div class="bp-pin-spacer"></div></div>
           </div>
         </div>
         <div class="bp-node-desc">Start climbing a specific ARACWrappingCable at the nearest point to the character.</div>
@@ -5330,7 +5332,7 @@
           <div class="bp-node-body">
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-exec connected"></div></div><div class="bp-pin bp-pin-out"><div class="bp-pin-exec connected"></div></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-bool)"></div><span class="bp-pin-label">Return Value</span></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target Actor</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Target</span></div><div class="bp-pin-spacer"></div></div>
           </div>
         </div>
         <div class="bp-node-desc">Connect a tow cable to the target actor. Spawns a cable with physics coupling. Returns false if already towing, target is null, or spawn fails.</div>
@@ -5566,7 +5568,7 @@
         <div class="prop"><span class="prop-name">InitialSpread</span><span class="prop-type">float</span><span class="prop-desc">Random offset at spawn for organic shapes. Default 0.</span></div>
         <div class="prop"><span class="prop-name">SubstepCount</span><span class="prop-type">Integer</span><span class="prop-desc">Physics substeps per frame. Higher = more stable at cost. Default 2, range 1-8. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">MaxAutoSubsteps</span><span class="prop-type">Integer</span><span class="prop-desc">Caps auto-substeps at low FPS. Default 4, range 1-8. <span class="tag tag-adv">Advanced</span></span></div>
-        <div class="prop"><span class="prop-name">bPreventStretching</span><span class="prop-type">bool</span><span class="prop-desc">Prevents cable segments from stretching beyond their rest length. Use for rigid materials like metal chains, wire rope, or anything that should not elongate. Segments still compress/fold naturally. Default false.</span></div>
+        <div class="prop"><span class="prop-name">bPreventStretching</span><span class="prop-type">bool</span><span class="prop-desc">Prevents cable segments from stretching beyond their rest length. Use for rigid materials like metal chains, wire rope, or anything that should not elongate. Segments still compress/fold naturally. Default false. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">MaxStretchDistance</span><span class="prop-type">float</span><span class="prop-desc">Max distance any grabbed particle can be dragged from its original position. Per-cable limit (CableInteractionComponent's own MaxStretchDistance takes priority when non-zero). 0 = unlimited. Default 0. <span class="tag tag-adv">Advanced</span></span></div>
       </div>
 
@@ -5652,12 +5654,12 @@
         <div class="prop"><span class="prop-name">bSegmentCollision</span><span class="prop-type">bool</span><span class="prop-desc">Trace cable segments (particle-to-particle) to catch pass-through on thin geometry. Prevents tunneling through walls that per-particle sweeps miss. Default false.</span></div>
         <div class="prop"><span class="prop-name">MaxTracesPerFrame</span><span class="prop-type">Integer</span><span class="prop-desc"><strong>Max Collision Traces / Frame</strong> - The single biggest knob for collision quality. Default 8 spreads traces across frames. 0 = unlimited (all particles every frame, best draping). Increase if the cable clips through surfaces.</span></div>
         <div class="prop"><span class="prop-name">bAdaptiveTracePriority</span><span class="prop-type">bool</span><span class="prop-desc"><strong>Adaptive Trace Priority</strong> - Prioritizes fast-moving and in-contact particles for traces. Particles at rest skip their turn so falling/swinging particles get traced every frame. Dramatically improves collision with the same trace budget. Default true.</span></div>
-        <div class="prop"><span class="prop-name">CollisionFriction</span><span class="prop-type">float</span><span class="prop-desc">Surface friction. 0 = frictionless, 1 = sticky. Default 0.3. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">CollisionFriction</span><span class="prop-type">float</span><span class="prop-desc">Surface friction. 0 = frictionless, 1 = sticky. Default 0.15. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">bSurfaceCrawl</span><span class="prop-type">bool</span><span class="prop-desc">Projects drift/attract forces onto surface tangent. Makes cables crawl along surfaces. Default false. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">SurfaceAdhesion</span><span class="prop-type">float</span><span class="prop-desc">Force pressing particles into surfaces. 0 = off. Default 0, range 0-500. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">CollisionChannel</span><span class="prop-type">Collision Channel</span><span class="prop-desc">Which channel to trace for collision. Default WorldStatic.</span></div>
-        <div class="prop"><span class="prop-name">bCollideWithStartActor</span><span class="prop-type">bool</span><span class="prop-desc">Allow the cable to collide with the actor attached at its start. When false (default), the start actor is ignored by collision traces.</span></div>
-        <div class="prop"><span class="prop-name">bCollideWithEndActor</span><span class="prop-type">bool</span><span class="prop-desc">Allow the cable to collide with the actor attached at its end. When false (default), the end actor is ignored by collision traces.</span></div>
+        <div class="prop"><span class="prop-name">bCollideWithStartActor</span><span class="prop-type">bool</span><span class="prop-desc">Allow the cable to collide with the actor attached at its start. When false (default), the start actor is ignored by collision traces. <span class="tag tag-adv">Advanced</span></span></div>
+        <div class="prop"><span class="prop-name">bCollideWithEndActor</span><span class="prop-type">bool</span><span class="prop-desc">Allow the cable to collide with the actor attached at its end. When false (default), the end actor is ignored by collision traces. <span class="tag tag-adv">Advanced</span></span></div>
         <div class="prop"><span class="prop-name">bCollisionLeash</span><span class="prop-type">bool</span><span class="prop-desc"><strong>Constrain at Wrap Points</strong> - When the cable wraps around geometry, constrain endpoints within the remaining rope length from the wrap point. Different from Inextensible: this is a local constraint at each wrap point, not a global length limit. Requires collision enabled. Default false.</span></div>
       </div>
 
@@ -7233,9 +7235,9 @@
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-exec connected"></div></div><div class="bp-pin bp-pin-out"><div class="bp-pin-exec connected"></div></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-object)"></div><span class="bp-pin-label">Actors</span></div><div class="bp-pin bp-pin-out"><div class="bp-pin-dot" style="--pin-color: var(--pin-int)"></div><span class="bp-pin-label">Return Value</span></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-vector)"></div><span class="bp-pin-label">Grouping Center</span></div><div class="bp-pin-spacer"></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-int)"></div><span class="bp-pin-label">Max Connections</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-int)"></div><span class="bp-pin-label">Max Connections Per Actor</span></div><div class="bp-pin-spacer"></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-float)"></div><span class="bp-pin-label">Max Cable Distance</span></div><div class="bp-pin-spacer"></div></div>
-            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-float)"></div><span class="bp-pin-label">Min Angle</span></div><div class="bp-pin-spacer"></div></div>
+            <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-float)"></div><span class="bp-pin-label">Min Angle Between Connections</span></div><div class="bp-pin-spacer"></div></div>
             <div class="bp-node-row"><div class="bp-pin"><div class="bp-pin-dot connected" style="--pin-color: var(--pin-float)"></div><span class="bp-pin-label">Distance Group Tolerance</span></div><div class="bp-pin-spacer"></div></div>
           </div>
         </div>
