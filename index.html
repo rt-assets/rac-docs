@@ -7419,6 +7419,12 @@
       const rect = section.getBoundingClientRect();
       if (rect.top <= 120) current = section.id;
     });
+    // If scrolled to bottom of page, force the last section active
+    // (needed for short sections at the end that can't scroll up to top<=120)
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
+      const last = sections[sections.length - 1];
+      if (last) current = last.id;
+    }
     navLinks.forEach(link => {
       link.classList.toggle('active', link.getAttribute('href') === '#' + current);
     });
