@@ -1265,6 +1265,24 @@
     box-shadow: 0 1px 4px rgba(90, 106, 122, 0.25);
   }
 
+  .version-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .version-header h3 {
+    margin: 0;
+  }
+
+  .version-date {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
   .upcoming-note {
     font-size: 0.82rem;
     color: var(--text-dim);
@@ -7362,37 +7380,46 @@
     <div class="section" id="changelog">
       <h2>Changelog</h2>
 
-      <h3>Upcoming <span class="version-badge-upcoming">In Progress</span></h3>
+      <div class="version-header">
+        <h3>Upcoming</h3>
+        <span class="version-badge-upcoming">In Progress</span>
+        <span class="version-date">TBA</span>
+      </div>
       <p class="upcoming-note">These changes are being worked on and will ship in the next update.</p>
       <ul>
         <li>Fixed: selecting a Cable Actor no longer shows a redundant "Visuals" category alongside "Appearance" in the Details panel. The actor's Appearance category is the single place to set cable visuals. Standalone Verlet Cable components (Swing, Pull, Tendrils) keep their built-in Visuals controls unchanged.</li>
         <li>Polished: Cable Actor Appearance category now lists Cable Mesh, Material, Additional Materials, Mesh Scale, Flow Tiling, Cast Shadow, and Receive Decals at the top, with Tension Material / Distance Scaling / End Caps / Pin Visuals groups beneath.</li>
+        <li>Editor placement tool improvements</li>
+        <li>Additional cable mesh and tether endpoint mesh options</li>
       </ul>
 
-      <h3>v1.0 <span class="version-badge">Latest</span></h3>
+      <div class="version-header">
+        <h3>v1.0</h3>
+        <span class="version-badge">Latest</span>
+        <span class="version-date">Apr 7, 2026</span>
+      </div>
       <ul>
-        <li>Initial Fab release</li>
-        <li>7 components: Verlet Cable, Cable Actor, Tether, Cable Point, Cable Interaction, Pulley, Swing</li>
-        <li>4 actors: Cable Actor, Wrapping Cable, Zipline Cable, Tether Point</li>
-        <li>2 Blueprint function libraries: Tether Utils, Cable Web Utils</li>
-        <li>Verlet physics solver with drift, attract, surface crawl, adhesion</li>
-        <li>4-tier LOD system with global cable budget</li>
-        <li>Runtime pinning with pulley behavior</li>
-        <li>Auto extend/retract and manual extend/retract</li>
-        <li>Physics coupling (two-way cable-to-rigidbody forces)</li>
-        <li>Parallel cable solving across CPU cores</li>
-        <li>Collision round-robin with configurable traces-per-frame budget</li>
-        <li>Tendrils VFX system</li>
+        <li>Initial release on Fab</li>
+        <li>15 classes: 7 components, 4 actors, 2 BP function libraries, 1 Niagara Data Interface, 1 data struct</li>
+        <li>Verlet physics solver with drift, wind, attract point, surface crawl, and adhesion</li>
+        <li>Wrapping Cable: geometry-aware cable that dynamically wraps around world geometry under tension</li>
+        <li>4-tier LOD system (Full, Medium, Low, Sleeping) with global cable budget</li>
+        <li>Multithreaded cable solving across CPU cores</li>
+        <li>World collision with round-robin trace budgeting per frame</li>
+        <li>Runtime pinning, cutting, extend/retract, and physics coupling</li>
+        <li>Tether Component with connect/disconnect animations, leash physics, and slide-along-cable</li>
+        <li>Swing, Pull, Climb, and Tow gameplay components</li>
+        <li>Zipline ride system with gravity influence</li>
+        <li>Cable Interaction Component with proximity and aim detection modes</li>
+        <li>Cable Point system for auto-connect networks and cable webs</li>
         <li>Beam/laser mode with taper, flare, and noise</li>
-        <li>Cable webs with Cable Parent system</li>
-        <li>Flow materials with per-segment DMIs</li>
+        <li>Tendrils VFX spawning</li>
+        <li>Flow materials with per-segment Dynamic Material Instances</li>
+        <li>Tension-driven material parameter with remap curve</li>
         <li>Distance-based thickness scaling</li>
-        <li>Connect/disconnect visual animations on Tether Component</li>
-        <li>Zipline ride system with gravity influence and auto-tether</li>
-        <li>Movement force system on Tether Component (spring/bungee player pull)</li>
-        <li>Wrapping Cable actor: geometry-aware cable that dynamically wraps around world geometry under tension</li>
-        <li>Tension material parameter drive with remap (bDriveMaterialTension) on Cable Actor, Verlet Cable Component, and Wrapping Cable</li>
-        <li>Cable Interaction Component now detects and supports grabbing Wrapping Cables</li>
+        <li>Niagara integration via custom Data Interface</li>
+        <li>Editor cable placement toolset (5 interactive tools)</li>
+        <li>UE 5.4, 5.5, 5.6, and 5.7 support</li>
       </ul>
     </div>
 
