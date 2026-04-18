@@ -15,6 +15,7 @@ RAC (Runtime Advanced Cables) is a Verlet-based cable and rope toolkit for Unrea
 ## Links
 
 - [Documentation](https://rt-assets.github.io/rac-docs)
+- [Example Projects (Google Drive)](https://drive.google.com/drive/folders/1E-ZG2wa4k6XQAXjsTqwu6K7BduDVslHs?usp=drive_link) - per-engine demo projects (UE 5.4-5.7) + built demo
 - [Fab Store Page](https://www.fab.com/sellers/RT%20Assets)
 - [Bug Reports & Feature Requests](https://github.com/rt-assets/rac-docs/issues)
 
