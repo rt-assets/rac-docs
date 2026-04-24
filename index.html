@@ -100,6 +100,7 @@
 
     /* Layout */
     --sidebar-w:    260px;
+    --vote-w:       440px;
 
     /* UE Blueprint pin type colors */
     --pin-exec:     #ffffff;
@@ -206,10 +207,10 @@
 
   .watermark {
     position: fixed;
-    bottom: -48px;
+    bottom: -30px;
     right: 8px;
-    width: 520px;
-    height: 520px;
+    width: 333px;
+    height: 333px;
     opacity: 0.035;
     pointer-events: none;
     z-index: 0;
@@ -355,8 +356,65 @@
   .main {
     padding: 2.5rem 3rem 4rem;
     max-width: 980px;
-    margin: 0 auto;
+    margin: 0;
     position: relative;
+  }
+
+  /* ---- Vote aside (embedded feature-voting iframe) ---- */
+  .vote-aside { display: none; }
+  @media (min-width: 1500px) {
+    .page { grid-template-columns: var(--sidebar-w) 1fr var(--vote-w); }
+    .vote-aside {
+      display: flex;
+      flex-direction: column;
+      padding: 0.75rem 1rem 0.75rem 0;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+    }
+    .vote-aside-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0 0.4rem 2px;
+      flex: 0 0 auto;
+    }
+    .vote-aside-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+    }
+    .vote-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 1px 7px 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s, border-color 0.15s, transform 0.2s;
+    }
+    .vote-toggle:hover { color: var(--accent); border-color: var(--accent); background: rgba(212,133,74,0.08); }
+    body.vote-collapsed .page { grid-template-columns: var(--sidebar-w) 1fr 38px; }
+    body.vote-collapsed .vote-aside { padding-right: 0; padding-left: 0.25rem; align-items: center; }
+    body.vote-collapsed .vote-aside-header { padding-bottom: 0; justify-content: center; }
+    body.vote-collapsed .vote-aside-label { display: none; }
+    body.vote-collapsed .vote-aside iframe { display: none; }
+    body.vote-collapsed .vote-toggle { transform: rotate(180deg); }
+    .vote-aside iframe {
+      display: block;
+      width: 100%;
+      flex: 1 1 auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(24, 25, 28, 0.35);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+    }
   }
 
   /* ---- Sections ---- */
@@ -1427,10 +1485,10 @@
     }
 
     .watermark {
-      width: 280px;
-      height: 280px;
-      bottom: -24px;
-      right: -16px;
+      width: 224px;
+      height: 224px;
+      bottom: -20px;
+      right: -12px;
     }
 
     .back-to-top {
@@ -7455,6 +7513,17 @@
     </div>
   </main>
 
+  <aside class="vote-aside" aria-label="Vote on upcoming features">
+    <div class="vote-aside-header">
+      <span class="vote-aside-label">Vote on what's next</span>
+      <button class="vote-toggle" type="button" aria-label="Collapse vote panel" title="Hide">&#x25B6;</button>
+    </div>
+    <iframe src="https://rac-vote.pages.dev/?embed=1"
+            title="Vote on upcoming RAC features"
+            loading="lazy"
+            allowtransparency="true"></iframe>
+  </aside>
+
 </div>
 
 <!-- Back to top -->
@@ -7632,5 +7701,24 @@
 </script>
 
 <script>document.querySelectorAll('.prop-type').forEach(el=>el.title=el.textContent);</script>
+
+<script>
+(function(){
+  var btn = document.querySelector('.vote-toggle');
+  if (!btn) return;
+  var KEY = 'racVoteCollapsed';
+  function apply(collapsed){
+    document.body.classList.toggle('vote-collapsed', collapsed);
+    btn.setAttribute('aria-label', collapsed ? 'Expand vote panel' : 'Collapse vote panel');
+    btn.title = collapsed ? 'Show' : 'Hide';
+  }
+  try { apply(localStorage.getItem(KEY) === '1'); } catch(e) {}
+  btn.addEventListener('click', function(){
+    var next = !document.body.classList.contains('vote-collapsed');
+    apply(next);
+    try { localStorage.setItem(KEY, next ? '1' : '0'); } catch(e) {}
+  });
+})();
+</script>
 </body>
 </html>
