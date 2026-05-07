@@ -322,36 +322,77 @@
   <div class="card" style="--card-accent: #D4854A;">
       <div class="card-header">
         <span class="card-number">01</span>
-        <span class="card-title">Hanging Cable</span>
+        <span class="card-title">Cable</span>
       </div>
       <ol class="card-steps">
-        <li>Place two actors in your level (any actor works)</li>
-        <li>Add a <code>Cable Point Component</code> to each actor</li>
-        <li>Hit Play. Nearby Cable Points auto-detect each other and spawn a cable between them. Or add the other actor to <code>ManualConnectionActors</code> for an explicit connection.</li>
+        <li>Drag a <code>RAC Cable</code> actor from the Content Browser into your level</li>
+        <li>On the cable's <code>VerletCable</code> component, set <code>AttachStartTo</code> and <code>AttachEndTo</code> to two actors in the scene (or leave one empty and use <code>AttachEndOffset</code> as an actor-local position)</li>
+        <li>Hit Play. The cable simulates between the endpoints with gravity, world collision, and rigid-body coupling</li>
+        <li>Tune <code>CableLength</code> for slack and <code>NumSegments</code> for resolution, or leave both at default</li>
+      </ol>
+  </div>
+
+  <div class="card" style="--card-accent: #EF7934;">
+      <div class="card-header">
+        <span class="card-number">02</span>
+        <span class="card-title">Wrapping Cable</span>
+      </div>
+      <ol class="card-steps">
+        <li>Drag a <code>RAC Wrapping Cable</code> actor into your level</li>
+        <li>Set <code>AttachStartTo</code> and <code>AttachEndTo</code> to two actors (or use offsets for fixed world points)</li>
+        <li>Assign a <code>CableMesh</code> and <code>CableMaterial</code> under <code>Appearance</code></li>
+        <li>Hit Play. The cable sags between the endpoints and automatically wraps around any geometry it touches</li>
+      </ol>
+  </div>
+
+  <div class="card" style="--card-accent: #A99AE0;">
+      <div class="card-header">
+        <span class="card-number">03</span>
+        <span class="card-title">Zipline</span>
+      </div>
+      <ol class="card-steps">
+        <li>Drag a <code>RAC Zipline Cable</code> actor into your level (a <code>RAC Cable</code> with ride physics pre-enabled)</li>
+        <li>Set <code>AttachStartTo</code> and <code>AttachEndTo</code> to two actors that bracket the run</li>
+        <li>From your player Blueprint, call <code>StartRiding(Character)</code> on the Zipline Cable</li>
+        <li>The player rides along the cable with auto-direction and gravity influence</li>
+      </ol>
+  </div>
+
+  <div class="card" style="--card-accent: #E0A858;">
+      <div class="card-header">
+        <span class="card-number">04</span>
+        <span class="card-title">Spline Cable</span>
+      </div>
+      <ol class="card-steps">
+        <li>Drag a <code>RAC Spline</code> actor into your level (a <code>RAC Cable</code> shaped by a spline)</li>
+        <li>Edit the path in the viewport - the actor's <code>PathSpline</code> uses the standard UE spline gizmo (Alt+drag a handle to add a point, drag handles to reshape)</li>
+        <li>Hit Play. Particles seed along the spline arc and the rope hugs your authored shape</li>
+        <li>Enable <code>bPinAllSplinePoints</code> for powerline / festoon-light hangs, or list specific indices in <code>PinnedSplinePointIndices</code></li>
       </ol>
   </div>
 
   <div class="card" style="--card-accent: #6BB8D4;">
       <div class="card-header">
-        <span class="card-number">02</span>
-        <span class="card-title">Cable Web</span>
+        <span class="card-number">05</span>
+        <span class="card-title">Cable Networks</span>
       </div>
       <ol class="card-steps">
-        <li>Place several actors with <code>Cable Point Components</code></li>
-        <li>Make sure <code>bAutoConnectNearby</code> is on (default) and they share the same <code>CableChannel</code></li>
-        <li>Adjust <code>AutoConnectRadius</code> and <code>MaxAutoConnections</code> as needed</li>
-        <li>Hit Play. Cables auto-generate between nearby points. Set one point as <code>bIsCableParent</code> to flow its Cable Defaults to the entire network.</li>
+        <li>Place two or more actors in your level (any actor works)</li>
+        <li>Add a <code>Cable Point Component</code> to each actor</li>
+        <li>Hit Play. Nearby Cable Points auto-detect each other and spawn cables between them</li>
+        <li>Tune <code>AutoConnectRadius</code> and <code>MaxAutoConnections</code>, or use <code>ManualConnectionActors</code> for explicit pairs. Cable Points must share the same <code>CableChannel</code> to connect</li>
+        <li>Set one Cable Point as <code>bIsCableParent</code> to flow its Cable Defaults (mesh, material, settings) to the entire network</li>
       </ol>
   </div>
 
   <div class="card" style="--card-accent: #5B9A68;">
       <div class="card-header">
-        <span class="card-number">03</span>
+        <span class="card-number">06</span>
         <span class="card-title">Player Tether</span>
       </div>
       <ol class="card-steps">
         <li>Add a <code>Tether Component</code> to your player character</li>
-        <li>Place <code>Cable</code> actors, <code>Wrapping Cable</code> actors, or <code>Tether Point</code> actors in your level</li>
+        <li>Place <code>RAC Cable</code>, <code>RAC Wrapping Cable</code>, or <code>RAC Tether Point</code> actors in your level</li>
         <li>Call <code>TetherToCable(Cable)</code>, <code>TetherToWrappingCable(Cable)</code>, <code>TetherToActor(Actor)</code>, or <code>TetherToPoint(WorldPos)</code> to connect</li>
         <li>A visual link cable appears between the player and the target</li>
         <li>Customize the link cable look with <code>LinkCableMesh</code>, <code>LinkCableMaterial</code>, attach meshes, etc.</li>
@@ -361,59 +402,33 @@
 
   <div class="card" style="--card-accent: #C49438;">
       <div class="card-header">
-        <span class="card-number">04</span>
+        <span class="card-number">07</span>
         <span class="card-title">Runtime Pinning</span>
       </div>
       <ol class="card-steps">
-        <li>On your <code>Cable</code> actor, find the <code>VerletCable</code> child component and set <code>bAllowPinning</code> = true</li>
+        <li>On your <code>RAC Cable</code> actor, find the <code>VerletCable</code> child component and set <code>bAllowPinning</code> = true</li>
         <li>Add a <code>Cable Interaction Component</code> to your player character (set <code>DetectionMode</code> to Proximity or Aim)</li>
-        <li>Call <code>PinNearestCable()</code> - finds the nearest cable, pins the closest particle, returns the index</li>
-        <li>Pins act as pulleys: rope slides through them, tension equalizes across sections</li>
-      </ol>
-  </div>
-
-  <div class="card" style="--card-accent: #A99AE0;">
-      <div class="card-header">
-        <span class="card-number">05</span>
-        <span class="card-title">Zipline</span>
-      </div>
-      <ol class="card-steps">
-        <li>Place a <code>Zipline Cable</code> in your level (a Cable Actor with ride physics pre-enabled)</li>
-        <li>In your player Blueprint, call <code>StartRiding(Character)</code> on the Zipline Cable</li>
-        <li>The player rides along the cable with auto-direction and gravity influence</li>
+        <li>Call <code>PinNearestCable()</code> - finds the nearest cable, pins the closest particle to a fixed world location, returns the particle index</li>
+        <li>Or call <code>PinNearestCableToActor(Actor, Socket, Offset)</code> to pin to a moving actor instead. Call <code>UnpinNearestCable()</code> to release</li>
       </ol>
   </div>
 
   <div class="card" style="--card-accent: #3898D8;">
       <div class="card-header">
-        <span class="card-number">06</span>
+        <span class="card-number">08</span>
         <span class="card-title">Rope Swing</span>
       </div>
       <ol class="card-steps">
         <li>Add a <code>Swing Component</code> to your player character</li>
         <li>Call <code>StartSwinging(PlayerCharacter)</code> - it fires an aim trace from the camera and spawns a grapple rope to the hit point</li>
-        <li>Use <code>AddPumpInput()</code> each tick from input to pump the swing. Call <code>StopSwinging()</code> to release with a launch</li>
+        <li>Use <code>AddPumpInput(Value)</code> each tick from input to pump the swing. Call <code>StopSwinging()</code> to release with a launch</li>
         <li>Or use <code>StartSwingingAtPoint(Character, PivotPoint)</code> to swing from an explicit world position</li>
-      </ol>
-  </div>
-
-  <div class="card" style="--card-accent: #EF7934;">
-      <div class="card-header">
-        <span class="card-number">07</span>
-        <span class="card-title">Wrapping Cable</span>
-      </div>
-      <ol class="card-steps">
-        <li>Place a <code>Wrapping Cable</code> actor in your level</li>
-        <li>Set <code>AttachStartTo</code> and <code>AttachEndTo</code> to two actors (or use offsets for positions)</li>
-        <li>Assign a <code>CableMesh</code> and <code>CableMaterial</code> under Appearance</li>
-        <li>Hit Play. The cable sags between endpoints and automatically wraps around any geometry it touches</li>
-        <li>To let the player grab it, add a <code>Cable Interaction Component</code> and call <code>GrabCable()</code></li>
       </ol>
   </div>
 
   <div class="card" style="--card-accent: #1CBC9C;">
       <div class="card-header">
-        <span class="card-number">08</span>
+        <span class="card-number">09</span>
         <span class="card-title">Sweep Cut</span>
       </div>
       <ol class="card-steps">
@@ -427,20 +442,20 @@
 
   <div class="card" style="--card-accent: #3B9B6B;">
       <div class="card-header">
-        <span class="card-number">09</span>
+        <span class="card-number">10</span>
         <span class="card-title">Spawn at Runtime</span>
       </div>
       <ol class="card-steps">
         <li>Call <code>SpawnCableBetween(StartActor, EndActor)</code> from the <code>Tether Utils</code> library</li>
-        <li>CableLength 0 = auto-calculate with 20% slack. NumSegments 0 = auto from distance</li>
-        <li>Pass <code>null</code> for EndActor and use <code>EndOffset</code> as an absolute world position</li>
-        <li>Returns the spawned <code>Cable Actor</code> - store the reference for later manipulation</li>
+        <li><code>CableLength</code> 0 = auto-calculate with 20% slack. <code>NumSegments</code> 0 = auto from distance</li>
+        <li>Pass <code>null</code> for <code>EndActor</code> and use <code>EndOffset</code> as an absolute world position for a fixed end</li>
+        <li>Returns the spawned <code>RAC Cable</code> actor - store the reference for later manipulation</li>
       </ol>
   </div>
 
   <div class="card" style="--card-accent: #8E0008;">
       <div class="card-header">
-        <span class="card-number">10</span>
+        <span class="card-number">11</span>
         <span class="card-title">Vehicle Towing</span>
       </div>
       <ol class="card-steps">
@@ -448,12 +463,13 @@
         <li>Add a <code>Tow Target Component</code> to anything towable. Set <code>AttachSocket</code> for a precise hitch point</li>
         <li>Call <code>AttachTowToNearest()</code> or <code>AttachTow(TargetActor)</code> to connect. A physics cable spawns between them</li>
         <li>Tune <code>TowStiffness</code>, <code>TowDamping</code>, and <code>BreakForce</code> under Tow Physics</li>
+        <li>Or call <code>AttachTowToNearestActorWithSocket(Radius, SocketName)</code> to hook onto any mesh in the world that has a named socket</li>
       </ol>
   </div>
 
   <div class="card" style="--card-accent: #98B0F8;">
       <div class="card-header">
-        <span class="card-number">11</span>
+        <span class="card-number">12</span>
         <span class="card-title">Pull Physics Objects</span>
       </div>
       <ol class="card-steps">
@@ -466,7 +482,7 @@
 
   <div class="card" style="--card-accent: #7A8B3C;">
       <div class="card-header">
-        <span class="card-number">12</span>
+        <span class="card-number">13</span>
         <span class="card-title">Rope Climbing</span>
       </div>
       <ol class="card-steps">

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAC Devlog - RT Assets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #1c1d21;
+    --bg-raised:    #232428;
+    --bg-inset:     #18191c;
+    --bg-hover:     #292a30;
+    --border:       #2e2f35;
+    --border-light: #393a42;
+    --text:         #c8c9cf;
+    --text-dim:     #8b8f97;
+    --text-faint:   #5f636a;
+    --text-bright:  #ebedf0;
+    --accent:       #D4854A;
+    --accent-soft:  rgba(212, 133, 74, 0.12);
+    --accent-line:  rgba(212, 133, 74, 0.45);
+    --blue:         #6BB8D4;
+    --blue-soft:    rgba(107, 184, 212, 0.12);
+    --blue-line:    rgba(107, 184, 212, 0.45);
+    --code-bg:      #1a1b1e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+  code, kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: var(--code-bg);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    color: #d4d6da;
+    border: 1px solid var(--border);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: #e09f6c; }
+
+  /* Dot grid background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle, var(--border) 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- Topbar ---- */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(28, 29, 33, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+  }
+  .topbar-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .topbar-brand span { color: var(--accent); }
+  .topbar-links { display: flex; gap: 0.5rem; }
+  .topbar-link {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.18s;
+  }
+  .topbar-link:hover {
+    color: var(--text-bright);
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  @media (max-width: 700px) { .topbar { padding: 0 1rem; } .topbar-brand { display: none; } }
+
+  /* ---- Layout ---- */
+  .page {
+    position: relative; z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 28px 96px;
+  }
+
+  /* ---- Hero ---- */
+  .hero { margin-bottom: 56px; }
+  .hero .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-bright);
+    margin-bottom: 14px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero p.lede {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 620px;
+    line-height: 1.55;
+  }
+
+  /* ---- Version rail ---- */
+  .rail {
+    margin: 40px 0 0;
+    padding: 18px 22px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .rail-step {
+    flex: 1;
+    min-width: 140px;
+    padding: 4px 14px;
+    position: relative;
+  }
+  .rail-step + .rail-step { border-left: 1px solid var(--border); }
+  .rail-step .ver {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rail-step .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--text-faint);
+    flex-shrink: 0;
+  }
+  .rail-step.shipped .dot { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .rail-step.live .dot {
+    background: var(--blue);
+    box-shadow: 0 0 0 0 rgba(107, 184, 212, 0.6);
+    animation: pulse 2.2s infinite;
+  }
+  .rail-step.next .dot { background: transparent; border: 1.5px dashed var(--text-faint); }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(107, 184, 212, 0.55); }
+    70%  { box-shadow: 0 0 0 9px rgba(107, 184, 212, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(107, 184, 212, 0); }
+  }
+  .rail-step .when {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .rail-step .what {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .rail-step.live .ver { color: var(--blue); }
+
+  /* ---- Pull quote ---- */
+  .quote {
+    margin: 48px 0;
+    padding: 26px 28px;
+    background: linear-gradient(135deg, var(--accent-soft), transparent 70%);
+    border: 1px solid var(--accent-line);
+    border-radius: 12px;
+    position: relative;
+  }
+  .quote::before {
+    content: '"';
+    position: absolute;
+    top: -10px; left: 18px;
+    font-family: Georgia, serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.6;
+  }
+  .quote blockquote {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--text-bright);
+    font-weight: 500;
+    padding-left: 24px;
+  }
+  .quote cite {
+    display: block;
+    margin-top: 12px;
+    padding-left: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-style: normal;
+  }
+  .quote cite .stars { color: var(--accent); margin-right: 8px; }
+
+  /* ---- Section header ---- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 56px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+  .section-head .when {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+  }
+  .section-head .pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-left: auto;
+  }
+  .pill.pill-live    { background: var(--blue-soft);   color: var(--blue);   border: 1px solid var(--blue-line); }
+  .pill.pill-shipped { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-line); }
+  .pill.pill-next    { background: transparent; color: var(--text-dim); border: 1px dashed var(--text-faint); }
+
+  /* ---- Item grid ---- */
+  .items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .item {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--text-faint);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: border-color 0.18s, background 0.18s, transform 0.18s;
+  }
+  .item:hover { border-color: var(--border-light); background: var(--bg-hover); transform: translateY(-1px); }
+  .item.fix     { border-left-color: var(--blue); }
+  .item.feat    { border-left-color: var(--accent); }
+  .item.polish  { border-left-color: var(--text-faint); }
+  .item.infra   { border-left-color: var(--blue); }
+  .item .kind {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .item.fix    .kind { color: var(--blue); }
+  .item.feat   .kind { color: var(--accent); }
+  .item.infra  .kind { color: var(--blue); }
+  .item .title {
+    font-weight: 600;
+    color: var(--text-bright);
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+  .item .body {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ---- Highlight block (big single feature) ---- */
+  .highlight {
+    margin-top: 12px;
+    padding: 22px 24px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-top: 3px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+  .highlight::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle at top right, var(--accent-soft), transparent 70%);
+    pointer-events: none;
+  }
+  .highlight .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .highlight h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .highlight p {
+    color: var(--text-dim);
+    font-size: 0.94rem;
+    line-height: 1.55;
+    max-width: 680px;
+  }
+  .highlight .when {
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* ---- Up-next checklist ---- */
+  .checklist {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 8px 18px;
+  }
+  .checklist li {
+    padding: 6px 0 6px 26px;
+    position: relative;
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 11px;
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--accent);
+    border-radius: 3px;
+    background: transparent;
+  }
+  .checklist li.done::before {
+    background: var(--accent);
+    box-shadow: inset 0 0 0 2px var(--bg-raised);
+  }
+  .checklist li small {
+    display: block;
+    color: var(--text-faint);
+    font-size: 0.78rem;
+    margin-top: 2px;
+  }
+
+  /* ---- Footer ---- */
+  .footer {
+    margin-top: 80px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+  .footer a { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .page { padding: 36px 18px 64px; }
+    .rail { flex-direction: column; }
+    .rail-step + .rail-step { border-left: none; border-top: 1px solid var(--border); padding-top: 14px; margin-top: 4px; }
+    .section-head { flex-wrap: wrap; }
+    .section-head .pill { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-brand">RT Assets // <span>RAC</span> Devlog</div>
+  <div class="topbar-links">
+    <a class="topbar-link" href="index.html">Docs</a>
+    <a class="topbar-link" href="RAC_QuickStart.html">Quick Start</a>
+    <a class="topbar-link" href="https://rac-vote.pages.dev/" target="_blank" rel="noopener">Vote</a>
+    <a class="topbar-link" href="https://www.fab.com/listings/20e51d7c-91cd-48d2-b439-49fc9ed6ea03" target="_blank" rel="noopener">Get on Fab</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<header class="hero">
+  <div class="eyebrow">Runtime Advanced Cables · Public Devlog</div>
+  <h1>Where <span class="accent">RAC</span> is going.</h1>
+  <p class="lede">A short, public log of what's shipping and what's coming next. Quiet weeks just mean we're heads-down on the next patch. Got an idea? Drop it on the <a href="https://rac-vote.pages.dev/" target="_blank" rel="noopener">vote board</a>.</p>
+
+  <div class="rail">
+    <div class="rail-step shipped">
+      <div class="ver"><span class="dot"></span>v1.0.0</div>
+      <div class="when">Apr 7 · Released</div>
+      <div class="what">First public release on Fab. UE 5.4 / 5.5 / 5.6 / 5.7.</div>
+    </div>
+    <div class="rail-step live">
+      <div class="ver"><span class="dot"></span>v1.0.1</div>
+      <div class="when">Apr 21 · Live now</div>
+      <div class="what">Swing follows moving platforms. Pull torque-on-grab. Demo polish.</div>
+    </div>
+    <div class="rail-step next">
+      <div class="ver"><span class="dot"></span>v1.0.2</div>
+      <div class="when">In development</div>
+      <div class="what">Multi-cable rigs, Spline Cable, long-cable solver overhaul.</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================ PULL QUOTE ============================================================ -->
+<section class="quote">
+  <blockquote>Best, most comprehensive cable plugin out there. Easy to use, extremely well commented, as plug and play as a system of this kind could possibly be. You want ropes, chains, swings, octopus tentacles, you name it, this system can help you create it. Worth twice what it cost, easy.</blockquote>
+  <cite><span class="stars">★★★★★</span> victoryatsea1 · first written review on Fab · Apr 22</cite>
+</section>
+
+<!-- ============================================================ v1.0.2 IN PROGRESS ============================================================ -->
+<div class="section-head">
+  <h2>v1.0.2 · in development</h2>
+  <span class="when">since Apr 21</span>
+  <span class="pill pill-next">In progress</span>
+</div>
+
+<div class="highlight">
+  <div class="label">Latest · Apr 30</div>
+  <h3>Long cables and grab-and-walk get a serious overhaul</h3>
+  <p>WrappingCable now scales particle count to cable length automatically (new <code>TargetSegmentLength</code> + <code>MaxParticlesPerCable</code>), wrap formation no longer pauses while you're holding the cable, and contact friction releases once the chain is over-stretched so cables flow past obstacles instead of getting glued. Substep gravity is properly compensated, visibility refreshes continuously on long droopy cables, and overlap capsules auto-grow with length so the whole rope stays grabbable. The portable subset of the same fixes lands on the regular cable too.</p>
+  <div class="when">v1.0.2 · WrappingCable + Verlet cable</div>
+</div>
+
+<div class="items" style="margin-top: 18px;">
+  <div class="item feat">
+    <span class="kind">Feature · Apr 26</span>
+    <span class="title">Spline Cable: place cable-shaped curves in the level</span>
+    <span class="body">New <code>ARACSplineCable</code> actor. Edit a spline component, the cable follows. No public API breaks.</span>
+  </div>
+  <div class="item feat">
+    <span class="kind">Feature · Apr 26</span>
+    <span class="title">Cable Point: drive endpoint physics + inextensible toggles</span>
+    <span class="body">Two new flags on <code>URACCablePointComponent</code> so multi-cable rigs (chandeliers, swings, anything with more than one rope on a body) actually behave.</span>
+  </div>
+  <div class="item fix">
+    <span class="kind">Fix · Apr 26</span>
+    <span class="title">Inextensible multi-cable: chains share the load</span>
+    <span class="body">Hanging a body from multiple <code>bPreventStretching</code> cables used to let the body drift because each cable overwrote the others. Now they apply additive impulses with Baumgarte position correction. All cables contribute every frame.</span>
+  </div>
+  <div class="item fix">
+    <span class="kind">Fix · Apr 26</span>
+    <span class="title">Attach offsets follow actor rotation and scale</span>
+    <span class="body">Start/End offsets are now actor-local-space, so rotating an attachment rotates its offsets too. Symmetric chandelier rigs no longer tip over.</span>
+  </div>
+  <div class="item polish">
+    <span class="kind">Polish · Apr 26</span>
+    <span class="title">Cleaner detail panel</span>
+    <span class="body">Redundant Cable Actor categories hidden in the editor. Show Debug Lines toggle on Cable Point now actually hides the lines.</span>
+  </div>
+  <div class="item polish">
+    <span class="kind">Polish · Apr 26</span>
+    <span class="title">Editor preview matches PIE</span>
+    <span class="body">In-editor preview uses a mock Verlet integrator so the shape you see in the viewport matches what you get in play.</span>
+  </div>
+  <div class="item fix">
+    <span class="kind">Fix · Apr 26</span>
+    <span class="title">Wrap points no longer trigger on flat floors</span>
+    <span class="body"><code>Constrain at Wrap Points</code> now ignores the floor so cables draped across surfaces stop snapping at random.</span>
+  </div>
+</div>
+
+<!-- ============================================================ v1.0.1 SHIPPED ============================================================ -->
+<div class="section-head">
+  <h2>v1.0.1 · live on Fab</h2>
+  <span class="when">Apr 21</span>
+  <span class="pill pill-live">Shipping now</span>
+</div>
+
+<div class="items">
+  <div class="item feat">
+    <span class="kind">Feature</span>
+    <span class="title">Swing follows moving platforms</span>
+    <span class="body">Grapple onto a moving train and you swing with it. Three new toggles control whether you follow, inherit platform velocity on release, or attach to actor origin Pull-style.</span>
+  </div>
+  <div class="item feat">
+    <span class="kind">Feature</span>
+    <span class="title">Pull grabs at the hit point</span>
+    <span class="body">New <code>bAttachToHitPoint</code> on Pull. Rope attaches where the trace landed and applies torque, so corner-grabs tumble naturally.</span>
+  </div>
+  <div class="item fix">
+    <span class="kind">Fix</span>
+    <span class="title">Swing auto-releases if the target is destroyed</span>
+    <span class="body">No more frozen ropes hanging in mid-air after the thing you grabbed gets blown up.</span>
+  </div>
+  <div class="item polish">
+    <span class="kind">Demo</span>
+    <span class="title">Cable Web station rebalanced</span>
+    <span class="body">Updated meshes, better cable spacing, intro tutorial prompt fixed.</span>
+  </div>
+  <div class="item polish">
+    <span class="kind">Polish</span>
+    <span class="title">Appearance category re-org</span>
+    <span class="body">Detail panel ordering and grouping for cable visuals is now consistent with how you actually edit them.</span>
+  </div>
+</div>
+
+<!-- ============================================================ v1.0.0 GENESIS ============================================================ -->
+<div class="section-head">
+  <h2>v1.0.0 · launched</h2>
+  <span class="when">Apr 7</span>
+  <span class="pill pill-shipped">Released</span>
+</div>
+
+<div class="highlight" style="border-top-color: var(--blue);">
+  <div class="label" style="color: var(--blue);">Genesis</div>
+  <h3>RAC went public on Fab.</h3>
+  <p>14 runtime classes. 7 demo stations. UE 5.4 / 5.5 / 5.6 / 5.7. The whole point: ready-made cable gameplay (Swing, Climb, Pull, Tow, Zipline, Tether, Interaction, Pulley) plus a topology-aware wrapping cable, a custom Niagara DI for VFX-driven cables, and multi-tier LOD. Built so you can drop a marker, get a cable, wire up gameplay in a Blueprint without touching C++.</p>
+  <div class="when">Initial Fab release</div>
+</div>
+
+<!-- ============================================================ ALSO SHIPPED ============================================================ -->
+<div class="section-head">
+  <h2>Around the plugin</h2>
+  <span class="when">post-launch</span>
+  <span class="pill pill-shipped">Live</span>
+</div>
+
+<div class="items">
+  <div class="item infra">
+    <span class="kind">Infra · Apr 24</span>
+    <span class="title">RAC Vote: a public roadmap board</span>
+    <span class="body">Upvote features and suggest new ones at <a href="https://rac-vote.pages.dev/" target="_blank" rel="noopener">rac-vote.pages.dev</a>. Embedded right inside these docs on wide screens.</span>
+  </div>
+  <div class="item infra">
+    <span class="kind">R&D · Apr 21</span>
+    <span class="title">v2.0 solver spike: all green</span>
+    <span class="body">An XPBD-based rewrite was prototyped in a standalone lab. Self-collision, two-way rigid body coupling, external attachment, world collision — all working. Not started in RAC yet, but the architectural risk for a future v2.0 is now low.</span>
+  </div>
+  <div class="item infra">
+    <span class="kind">Marketing · Apr 20</span>
+    <span class="title">YouTube Short cut</span>
+    <span class="body">A 32s portrait reel of the demo stations: wrapping, physics, cut & regrow, tether, live editor preview, debug & LOD.</span>
+  </div>
+  <div class="item polish">
+    <span class="kind">Docs · Apr 18</span>
+    <span class="title">Example Projects on a single Drive folder</span>
+    <span class="body">All four engine versions live in one Google Drive folder. No more swapping per-version links every release.</span>
+  </div>
+</div>
+
+<!-- ============================================================ UP NEXT ============================================================ -->
+<div class="section-head">
+  <h2>Up next</h2>
+  <span class="when">v1.0.2 wishlist</span>
+  <span class="pill pill-next">In flight</span>
+</div>
+
+<ul class="checklist">
+  <li class="done">Long-cable + grab-walk overhaul <small>Done · Apr 30</small></li>
+  <li class="done">Spline Cable actor <small>Done · Apr 26</small></li>
+  <li class="done">Multi-cable inextensible solver <small>Done · Apr 26</small></li>
+  <li class="done">Attach offset semantics fix <small>Done · Apr 26</small></li>
+  <li>Niagara NDI extensions <small>Parked, design ready</small></li>
+  <li>More chandelier-style rig examples in the demo project</li>
+  <li>Additional vote-board items <small>Driven by <a href="https://rac-vote.pages.dev/" target="_blank" rel="noopener">community votes</a></small></li>
+</ul>
+
+<div class="footer">
+  <div>RT Assets · Runtime Advanced Cables · <a href="index.html">Docs</a> · <a href="RAC_QuickStart.html">Quick Start</a> · <a href="https://rac-vote.pages.dev/" target="_blank" rel="noopener">Vote</a></div>
+  <div>Updated 2026-04-30</div>
+</div>
+
+</div>
+</body>
+</html>
