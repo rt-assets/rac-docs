@@ -1623,6 +1623,7 @@
       <a href="#overview" class="nav-link active">Overview</a>
       <a href="#installation" class="nav-link">Installation</a>
       <a href="#placing-cables" class="nav-link">Placing Cables</a>
+      <a href="#collision" class="nav-link">Collision</a>
       <a href="#cable-cutting" class="nav-link">Cable Cutting</a>
       <a href="#performance" class="nav-link">Performance Tips</a>
       <a href="#editor-visualizer" class="nav-link">Editor Visualizer</a>
@@ -1631,7 +1632,6 @@
       <a href="#segments-tiling" class="nav-link">Segments &amp; Tiling</a>
       <a href="#materials" class="nav-link">Flow Materials</a>
       <a href="#wind-drift" class="nav-link">Wind &amp; Drift</a>
-      <a href="#collision" class="nav-link">Collision</a>
 
       <div class="nav-group-label">Place in Level</div>
       <a href="#cable-actor" class="nav-link"><span class="nav-cable-dot cable"></span>Cable Actor</a>
@@ -1818,6 +1818,82 @@
         </tbody>
       </table>
       <p>All methods produce the same <code>Cable Actor</code> or <code>Wrapping Cable</code> - they just differ in when and how the cable is created. You can mix and match freely.</p>
+    </div>
+
+    <hr>
+
+    <!-- ============ COLLISION ============ -->
+    <div class="section" id="collision">
+      <h2>Collision</h2>
+      <p>How RAC cables interact with world geometry, and how to detect or interact with cables from gameplay.</p>
+
+      <h3>How it works</h3>
+      <p>The cable component is a <code>USceneComponent</code> driving spline mesh visuals. It has no collision primitive of its own. World geometry is sampled by per-particle sphere sweeps from the cable, and gameplay code talks to cables through the <a href="#cable-interaction">Cable Interaction Component</a> placed on the player or character.</p>
+
+      <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+        <thead>
+          <tr style="border-bottom:1px solid #444;">
+            <th style="text-align:left; padding:8px; color:#aaa;">What you want</th>
+            <th style="text-align:left; padding:8px; color:#aaa;">How</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #333;">
+            <td style="padding:8px;">Cable drapes, wraps, and slides on world meshes</td>
+            <td style="padding:8px;">Per-particle sphere sweeps on the cable's <strong>Collision Channel</strong>. Configured in the cable's <strong>Collision</strong> category.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #333;">
+            <td style="padding:8px;">Player or weapon trace finds a cable, returns hit point and particle index</td>
+            <td style="padding:8px;"><a href="#cable-interaction">Cable Interaction Component</a> on the player or character. <code>Get Detected Cable</code> returns the cable currently under aim or in range.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #333;">
+            <td style="padding:8px;">Cable enters or exits the player's range, gets grabbed, gets cut</td>
+            <td style="padding:8px;"><a href="#cable-interaction">Cable Interaction Component</a> events: <code>On Cable In Range</code>, <code>On Cable Out Of Range</code>, <code>On Cable Grabbed</code>, <code>On Cable Cut</code>.</td>
+          </tr>
+          <tr>
+            <td style="padding:8px;">Rigid body bounces off the cable (e.g. a thrown grenade hits the rope and ricochets)</td>
+            <td style="padding:8px;">The cable's particle sweeps will detect the rigid body and the cable can drape or deflect against it. The rigid body's own physics simulation has no primitive to hit on the cable, so it won't bounce off or feel a reaction force.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Make the cable collide with world geometry</h3>
+      <p>On the cable's details panel, under the <strong>Collision</strong> category:</p>
+      <ol>
+        <li>Tick <strong>Enable Collision</strong>.</li>
+        <li>Pick a <strong>Collision Channel</strong> (default <code>WorldStatic</code>). The meshes you want the cable to collide with must <em>block</em> that channel.</li>
+        <li>Set <strong>Collision Radius</strong> to the visual thickness of your cable (default 5 units).</li>
+      </ol>
+
+      <div class="callout callout-info">
+        <div class="callout-title">Defaults differ between cable types</div>
+        <strong>Cable Actor</strong> (Verlet) ships with <strong>Enable Collision</strong> off by default. <strong>Wrapping Cable</strong> ships with it on. If you placed a Cable Actor and it's falling through the floor, this is the toggle. Both cable types share the same Collision Channel default of <code>WorldStatic</code>.
+      </div>
+
+      <p>For full property reference (Max Traces / Frame, Adaptive Trace Priority, Segment Collision, Collision Friction, Trace Every Substep) see the <a href="#cable-actor">Cable Actor</a> and <a href="#wrapping-cable">Wrapping Cable</a> property pages.</p>
+
+      <h3>Detect, grab, or cut a cable from gameplay</h3>
+      <p>Place a <a href="#cable-interaction">Cable Interaction Component</a> on the player or character Blueprint. Pick <strong>Aim</strong> mode for crosshair-based targeting, or <strong>Proximity</strong> mode for overlap-based detection. The component exposes:</p>
+      <ul>
+        <li><code>Get Detected Cable</code> - returns the cable, hit point, particle index, and distance currently under aim or in range.</li>
+        <li><code>On Cable In Range</code> / <code>On Cable Out Of Range</code> events for proximity / aim entry and exit.</li>
+        <li><code>Grab Cable</code>, <code>Release Cable</code>, <code>Pin Nearest Cable</code>, <code>Cut Nearest Cable</code>, sweep cut for slash-cutting.</li>
+      </ul>
+      <p>The included demo project's character Blueprint has this wired to input bindings; copy it as a starting point.</p>
+
+      <h3>Debugging collision setup</h3>
+      <ul>
+        <li><strong>Show Collision in the viewport</strong> (Alt+C in the editor, or Show menu &rarr; Collision in PIE). Meshes with no green wireframe have no collision and the cable cannot see them either.</li>
+        <li><strong>Cross-check the trace channel.</strong> If your meshes use a custom collision profile that ignores <code>WorldStatic</code>, switch the cable's Collision Channel to <code>Visibility</code> as a quick test. Most default profiles block both.</li>
+        <li><strong>Verify mesh collision is enabled.</strong> Static meshes set to <em>Collision Enabled: No Collision</em> or to a profile like <em>OverlapAll</em> won't block the cable's traces.</li>
+        <li><strong>Cable ignores its own attachments.</strong> The cable automatically ignores its owner actor and the actors set in <code>Attach Start To</code> / <code>Attach End To</code>. If the cable is attached to your character, it won't collide with that character's capsule. Other characters still collide normally.</li>
+        <li><strong>Editor preview shows the trace radius.</strong> Selecting a cable in the viewport draws blue spheres along the chain at the configured Collision Radius (only when Enable Collision is on).</li>
+      </ul>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">Tip</div>
+        On long cables in heavy contact, the cable auto-promotes to per-substep tracing on the active region. If you're seeing collision misses on fast-swinging short cables, tick <code>Trace Every Substep</code> on the Cable Actor / Verlet Cable.
+      </div>
     </div>
 
     <hr>
@@ -2299,93 +2375,6 @@
       <div class="callout callout-tip">
         <div class="callout-title">Tip</div>
         Wind and drift stack naturally. Use drift for constant ambient motion and wind for directional, weather-driven movement. For Cable Point networks, set <code>CableDriftStrength</code> and <code>CableDriftFrequency</code> in the Cable Parent defaults to apply drift to all cables at once.
-      </div>
-    </div>
-
-    <hr>
-
-    <!-- ============ COLLISION ============ -->
-    <div class="section" id="collision">
-      <h2>Collision</h2>
-      <p>How RAC cables interact with world geometry, and how to detect or interact with cables from gameplay code. Read this first if your cable is falling through walls, or if a Line Trace against the cable is returning no hit.</p>
-
-      <h3>One-way model</h3>
-      <p>RAC cables detect the world. The world does not detect the cable. The cable component is a <code>USceneComponent</code> driving spline mesh visuals; it has no collision primitive of its own, so external traces and physics bodies cannot hit it.</p>
-
-      <table style="width:100%; border-collapse:collapse; margin:1em 0;">
-        <thead>
-          <tr style="border-bottom:1px solid #444;">
-            <th style="text-align:left; padding:8px; color:#aaa;">Direction</th>
-            <th style="text-align:left; padding:8px; color:#aaa;">Supported?</th>
-            <th style="text-align:left; padding:8px; color:#aaa;">Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="border-bottom:1px solid #333;">
-            <td style="padding:8px;">Cable particles sweep against world geometry (cable drapes, wraps, slides on meshes)</td>
-            <td style="padding:8px; color:#7fcc7f;">Yes</td>
-            <td style="padding:8px;">Per-particle sphere sweeps on the cable's <strong>Collision Channel</strong>. Configured in the cable's <strong>Collision</strong> category.</td>
-          </tr>
-          <tr style="border-bottom:1px solid #333;">
-            <td style="padding:8px;">Line Trace / Sweep fired AT the cable from gameplay code</td>
-            <td style="padding:8px; color:#cc7f7f;">No</td>
-            <td style="padding:8px;">The cable has no primitive shape. Use the <a href="#cable-interaction">Cable Interaction Component</a> for trace-style detection, grab, cut, and pin.</td>
-          </tr>
-          <tr style="border-bottom:1px solid #333;">
-            <td style="padding:8px;">On Component Hit / On Begin Overlap on the cable component</td>
-            <td style="padding:8px; color:#cc7f7f;">No</td>
-            <td style="padding:8px;">No body instance to fire these events. Use the <a href="#cable-interaction">Cable Interaction Component</a>'s events (<code>On Cable In Range</code>, <code>On Cable Grabbed</code>, <code>On Cable Cut</code>, etc.) instead.</td>
-          </tr>
-          <tr>
-            <td style="padding:8px;">Rigid body bouncing / pushing the cable (e.g. a thrown grenade hits the rope and the rope reacts)</td>
-            <td style="padding:8px; color:#cc7f7f;">No</td>
-            <td style="padding:8px;">Verlet particles are not physics bodies. Two-way rigid coupling is on the v2.0 roadmap, not in v1.x.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3>Make the cable collide with world geometry</h3>
-      <p>On the cable's details panel, under the <strong>Collision</strong> category:</p>
-      <ol>
-        <li>Tick <strong>Enable Collision</strong>.</li>
-        <li>Pick a <strong>Collision Channel</strong> (default <code>WorldStatic</code>). Whichever channel you choose, the meshes you want the cable to collide with must <em>block</em> that channel.</li>
-        <li>Set <strong>Collision Radius</strong> to the visual thickness of your cable (default 5 units).</li>
-      </ol>
-
-      <div class="callout callout-info">
-        <div class="callout-title">Defaults differ between cable types</div>
-        <strong>Cable Actor</strong> (Verlet) ships with <strong>Enable Collision</strong> off by default. <strong>Wrapping Cable</strong> ships with it on. If you placed a Cable Actor and it's falling through the floor, this is the toggle. Both cable types share the same Collision Channel default of <code>WorldStatic</code>.
-      </div>
-
-      <p>For full property reference (Max Traces / Frame, Adaptive Trace Priority, Segment Collision, Collision Friction, Trace Every Substep) see the <a href="#cable-actor">Cable Actor</a> and <a href="#wrapping-cable">Wrapping Cable</a> property pages.</p>
-
-      <h3>Detect, grab, or cut a cable from gameplay</h3>
-      <p>Cables are not traceable primitives, so this does not work:</p>
-      <ul>
-        <li>Firing <code>Line Trace By Channel</code> from a weapon and expecting the cable to be in the hit result.</li>
-        <li>Binding <code>On Component Hit</code> on a cable component and expecting it to fire when the player walks into the cable.</li>
-        <li>Spawning a projectile and expecting it to bounce off the cable.</li>
-      </ul>
-      <p>The supported workflow is the inverse: place a <a href="#cable-interaction">Cable Interaction Component</a> on the player or character Blueprint. Pick <strong>Aim</strong> mode for crosshair-based targeting, or <strong>Proximity</strong> mode for overlap-based detection. The component exposes:</p>
-      <ul>
-        <li><code>Get Detected Cable</code> - returns the cable, hit point, particle index, and distance currently under aim or in range. This is the trace result for cables.</li>
-        <li><code>On Cable In Range</code> / <code>On Cable Out Of Range</code> events for proximity / aim entry and exit.</li>
-        <li><code>Grab Cable</code>, <code>Release Cable</code>, <code>Pin Nearest Cable</code>, <code>Cut Nearest Cable</code>, sweep cut for slash-cutting.</li>
-      </ul>
-      <p>The included demo project's character Blueprint has it set up with input bindings; copy that as a starting point.</p>
-
-      <h3>Debugging collision setup</h3>
-      <ul>
-        <li><strong>Show Collision in the viewport</strong> (Alt+C in the editor, or Show menu &rarr; Collision in PIE). Meshes with no green wireframe have no collision and the cable cannot see them either.</li>
-        <li><strong>Cross-check the trace channel.</strong> If your meshes use a custom collision profile that ignores <code>WorldStatic</code>, switch the cable's Collision Channel to <code>Visibility</code> as a quick test. Most default profiles block both.</li>
-        <li><strong>Verify mesh collision is enabled.</strong> Static meshes set to <em>Collision Enabled: No Collision</em> or to a profile like <em>OverlapAll</em> won't block the cable's traces.</li>
-        <li><strong>Cable ignores its own attachments.</strong> The cable automatically ignores its owner actor and the actors set in <code>Attach Start To</code> / <code>Attach End To</code>. If the cable is attached to your character, it won't collide with that character's capsule. Other characters still collide normally.</li>
-        <li><strong>Editor preview shows the trace radius.</strong> Selecting a cable in the viewport draws blue spheres along the chain at the configured Collision Radius (only when Enable Collision is on).</li>
-      </ul>
-
-      <div class="callout callout-tip">
-        <div class="callout-title">Tip</div>
-        On long cables in heavy contact, the cable auto-promotes to per-substep tracing on the active region. If you're seeing collision misses on fast-swinging short cables, tick <code>Trace Every Substep</code> on the Cable Actor / Verlet Cable for higher fidelity at a perf cost.
       </div>
     </div>
 
