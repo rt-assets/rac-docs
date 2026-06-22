@@ -493,6 +493,32 @@
       </ol>
   </div>
 
+  <div class="card" style="--card-accent: #C25A4A;">
+      <div class="card-header">
+        <span class="card-number">14</span>
+        <span class="card-title">Cable Breaking</span>
+      </div>
+      <ol class="card-steps">
+        <li>On your <code>RAC Cable</code>, open the <code>Breaking</code> category and enable <code>bBreakUnderTension</code> (independent of Allow Cutting)</li>
+        <li>Set <code>BreakStretchRatio</code> (e.g. 1.5 = snaps at 150% of rest length). <code>BreakHoldTime</code> keeps a brief tug or a one-frame spike from snapping it</li>
+        <li>For a cable holding or towing a physics object, also set <code>BreakTensionRatio</code> (~1.5) so it breaks under load even when too stiff to visibly stretch - watch the <code>CurrentPeakStrain</code> readout to tune</li>
+        <li>The cable snaps into two pieces (with the cut whip/impulse + optional auto-destroy) and fires <code>OnCableBroken</code></li>
+      </ol>
+  </div>
+
+  <div class="card" style="--card-accent: #B0843C;">
+      <div class="card-header">
+        <span class="card-number">15</span>
+        <span class="card-title">Chain Links</span>
+      </div>
+      <ol class="card-steps">
+        <li>On your <code>RAC Cable</code>, set <code>CableMesh</code> to a single chain-link mesh modeled along its Z axis</li>
+        <li>In <code>Appearance &gt; Chain Links</code>, enable <code>bChainLinks</code> - the cable renders as rigid fixed-size links instead of a stretched mesh</li>
+        <li>Set <code>ChainLinkSpacing</code> (~60-75% of the link length for interlocking links) and <code>ChainLinkScale</code>; <code>ChainLinkTwist</code> 90 gives the classic alternating look</li>
+        <li>Pick <code>ChainFeedEnd</code> (Start/End) - as the cable extends or retracts, links feed in and out at that end instead of stretching (the winch/hoist look)</li>
+      </ol>
+  </div>
+
 </main>
 
 <!-- Footer -->
