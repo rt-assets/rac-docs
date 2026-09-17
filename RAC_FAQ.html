@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAC - Fab Listing FAQ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #111215;
+    color: #999;
+    padding: 2.5rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  h1 {
+    color: #e0e0e0;
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin-bottom: 0.2rem;
+  }
+
+  h1 span { color: #D4854A; }
+
+  .subtitle {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 2.5rem;
+  }
+
+  .faq-item {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #1e1f25;
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .faq-q {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 0.6rem;
+  }
+
+  .faq-a {
+    font-size: 0.84rem;
+    color: #999;
+    line-height: 1.7;
+  }
+
+  .faq-a strong {
+    color: #ccc;
+  }
+
+  .faq-section {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #D4854A;
+    background: rgba(212, 133, 74, 0.08);
+    border: 1px solid rgba(212, 133, 74, 0.2);
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 3px;
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  .note {
+    font-size: 0.75rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 0.6rem;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e1f25;
+    font-size: 0.7rem;
+    color: #444;
+  }
+</style>
+</head>
+<body>
+
+<h1>RAC <span>FAQ</span></h1>
+<p class="subtitle">Pre-purchase questions for the Fab listing. Copy what you need.</p>
+
+<!-- ── BASICS ── -->
+<div class="faq-section">Before You Buy</div>
+
+<div class="faq-item">
+  <div class="faq-q">Do I need to know C++ to use this?</div>
+  <div class="faq-a"><strong>No.</strong> Every class, property, function, and event is fully exposed to Blueprints. You can build a complete grapple hook, zipline, or cable network without writing a single line of C++. The plugin is written in C++ for performance, but designed for Blueprint users.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Which Unreal Engine versions are supported?</div>
+  <div class="faq-a"><strong>UE 5.4, 5.5, 5.6, 5.7, and 5.8.</strong> Each version is compiled and tested separately. UE 5.3 and below are not supported.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Is there a demo project I can try before buying?</div>
+  <div class="faq-a"><strong>Yes.</strong> A full playable demo level is included as a separate download. It showcases every major feature - cable networks, physics coupling, grapple swinging, ziplines, tethering, cutting, pinning, extend/retract, and more. You can use the demo level as a starting point for your own project.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">What platforms does it support?</div>
+  <div class="faq-a">RAC is a <strong>pure C++ plugin with no platform-specific code</strong> and no third-party dependencies. It uses standard UE APIs (traces, components, spline meshes) and should work on any platform Unreal Engine supports. It has been developed and tested on Windows.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">How is this different from UE's built-in Cable Component?</div>
+  <div class="faq-a">The built-in Cable Component is a basic visual-only rope with no collision, no interaction, no cutting, no LOD, and no gameplay features. RAC replaces it with a full physics simulation (world collision, wind, drift), 8 gameplay components (swing, climb, pull, tow, zipline, tether, interaction, pulley), cable networks, Niagara integration, a 4-tier LOD system, runtime cutting with regrow, and much more.</div>
+</div>
+
+<!-- ── FEATURES ── -->
+<div class="faq-section">Features</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I make a grapple hook / Spider-Man swing?</div>
+  <div class="faq-a"><strong>Yes.</strong> The Swing Component does exactly this. Aim at a surface, fire a rope, swing on a pendulum with pump input, and launch off with velocity. It includes rope fire/retract animations, auto-pull-in, camera avoidance, configurable launch boost, and visual rope with collision. Drop it on your character and bind two inputs.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I make ziplines?</div>
+  <div class="faq-a"><strong>Yes.</strong> Drop a Zipline Cable actor into your level, set two endpoints, done. Players ride along it with gravity influence, optional pendulum swing, and manual speed control. You can also make any regular cable rideable by toggling a single bool.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can players grab, drag, pin, and cut cables at runtime?</div>
+  <div class="faq-a"><strong>Yes.</strong> The Cable Interaction Component handles all of this. It supports two detection modes (proximity overlap and aim/crosshair ray), grabbing and dragging with the player, pinning cables to the world or to actors, unpinning, cutting, and sweep-cutting. Every action fires Blueprint events.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can cables wrap around objects?</div>
+  <div class="faq-a"><strong>Yes.</strong> The Wrapping Cable is a separate cable type that dynamically creates wrap anchor points around world geometry as it's pulled around corners, pillars, and obstacles. It maintains independent physics chains between anchors and supports all the same features (cutting, riding, tethering, Niagara, LOD).</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I attach cables to moving actors / skeletal meshes / sockets?</div>
+  <div class="faq-a"><strong>Yes.</strong> Cable endpoints can attach to any actor, with optional socket and offset. They follow the target in real time. You can also re-attach endpoints at runtime, free them to dangle, or pin individual particles to actors.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can cables pull physics objects?</div>
+  <div class="faq-a"><strong>Yes, two ways.</strong> The Tow Component connects two actors with a spring-coupled cable (vehicles, crates, anything with physics). The Pull Component lets a player aim at a physics object and reel it in with a grapple rope. Both include break force, tension events, and visual ropes.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I spawn cable networks / webs automatically?</div>
+  <div class="faq-a"><strong>Yes.</strong> Place Cable Point Components on actors, configure connection rules (radius, max connections, minimum angle, channels), and the system builds cable networks at BeginPlay using deterministic auto-connect. There's also a Cable Web utility that generates web patterns from a set of points. A Cable Parent system lets you configure cable defaults (material, thickness, LOD, collision) for an entire network from one place.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I use Niagara effects on cables?</div>
+  <div class="faq-a"><strong>Yes.</strong> RAC includes a custom Niagara Data Interface that exposes cable particle positions in real time. Build ribbon effects, sparks, glow trails, or anything else that follows the cable shape. A sample Niagara system is included. Works with both regular cables and wrapping cables.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can cut cables regrow?</div>
+  <div class="faq-a"><strong>Yes.</strong> Cutting splits a cable into two pieces. The original cable can regrow to its initial length at a configurable speed, with optional delay. It can even seek back toward its original attachment point and reattach. Cut pieces can auto-destroy after a timer, and you can assign different materials to the cut ends.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can cables extend and retract at runtime?</div>
+  <div class="faq-a"><strong>Yes.</strong> Manual extend/retract with configurable speed and min/max length. There's also auto-extend (cable grows when pulled taut) and auto-retract (cable shortens when slack), both with configurable tension thresholds. This works for winch mechanics, auto-adjusting tethers, and grapple rope reeling.</div>
+</div>
+
+<!-- ── PERFORMANCE ── -->
+<div class="faq-section">Performance</div>
+
+<div class="faq-item">
+  <div class="faq-q">How many cables can I have in a scene?</div>
+  <div class="faq-a">It depends on your settings, but <strong>dozens to hundreds</strong> is realistic with LOD enabled. The 4-tier LOD system (Full, Medium, Low, Sleeping) scales solver work, collision traces, visual segments, and shadow casting by distance. Cables far from the camera cost nearly nothing. There's also a global cable budget that caps how many cables run at Full and Medium LOD simultaneously, and parallel multi-threaded solving.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Do idle gameplay components cost performance?</div>
+  <div class="faq-a"><strong>No.</strong> Swing, Pull, Climb, and Tow components disable their tick when not actively in use. A character with all four components sitting idle costs zero simulation time.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">How does collision work? Is it expensive?</div>
+  <div class="faq-a">Collision uses per-particle sphere traces against the world. You control the cost with <strong>Max Traces Per Frame</strong> - the default (8) spreads traces across frames so not every particle is checked every tick. An adaptive priority system ensures fast-moving and colliding particles get traced first. For fast ropes (grapple, swing), there's a high-fidelity mode that traces every substep. Segment-to-segment traces catch tunneling through thin geometry. You choose the quality/cost tradeoff per cable.</div>
+</div>
+
+<!-- ── TECHNICAL ── -->
+<div class="faq-section">Technical</div>
+
+<div class="faq-item">
+  <div class="faq-q">Does it support multiplayer / replication?</div>
+  <div class="faq-a"><strong>Multiplayer and replication are not officially supported.</strong> Basic property replication is available, but it is not a supported multiplayer workflow. See the <a href="index.html#replication">full documentation</a> for existing behavior and limitations.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">My chain link cables are blurry?</div>
+  <div class="faq-a">Enable <strong>Chain Motion Vectors (TSR/TAA)</strong> on your Cable actor or Tow component to reduce chain ghosting, or switch your project's <strong>Anti-Aliasing Method</strong> to <strong>FXAA</strong> or <strong>None</strong> to avoid temporal blur. See the <a href="index.html#cable-blur">full troubleshooting steps</a> for motion blur and other causes.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Is RAC compatible with Nanite?</div>
+  <div class="faq-a"><strong>Partial compatibility.</strong> RAC can be used in projects with Nanite enabled. Unreal Engine 5.4 and later support Nanite spline meshes, but not every RAC visual mode, mesh, and material combination has been validated with Nanite. Keep Nanite disabled on a cable mesh if it shows rendering issues; Nanite can remain enabled on other supported scene meshes. Nanite does not accelerate RAC's cable physics. See <a href="https://dev.epicgames.com/documentation/unreal-engine/working-with-naniteenabled-content" target="_blank" rel="noopener">Epic's Nanite documentation</a> for engine support.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Do cables collide with each other (self-collision)?</div>
+  <div class="faq-a"><strong>No.</strong> Cables collide with the world (static and dynamic geometry) but pass through each other. This keeps collision cost manageable and is fine for most gameplay scenarios. Self-collision / rope-to-rope collision is not currently supported.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">What physics solver does it use?</div>
+  <div class="faq-a">Verlet integration with distance constraints. Configurable solver iterations (more = stiffer), substeps, and damping. It's not XPBD - stiffness depends on iteration count - but it's stable, fast, and well-suited to gameplay ropes where feel matters more than physical accuracy.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Does it use Chaos / PhysX?</div>
+  <div class="faq-a"><strong>Neither.</strong> RAC runs its own independent Verlet solver. It doesn't depend on the engine's physics system for cable simulation. It does use the engine's trace system for collision and the engine's physics for driving attached rigidbodies (tow, pull), but the cable itself is self-contained.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I use it alongside other physics plugins?</div>
+  <div class="faq-a"><strong>Yes.</strong> RAC has no dependencies beyond Core, CoreUObject, and Engine. It won't conflict with other plugins. The only interaction point is if both systems try to drive the same physics body.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">What's the difference between Cable Actor and Wrapping Cable?</div>
+  <div class="faq-a"><strong>Cable Actor</strong> is the standard cable - a Verlet chain between two endpoints with spline mesh visuals. Great for most use cases. <strong>Wrapping Cable</strong> is a separate actor that dynamically wraps around geometry by creating anchor points at contact. It's heavier but enables ropes that pull around corners, pillars, and obstacles realistically. Both support cutting, riding, tethering, Niagara, and LOD.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Can I use my own meshes and materials?</div>
+  <div class="faq-a"><strong>Yes.</strong> Every visual element is configurable - cable mesh, material (with UV flow tiling), end cap meshes, seal cap meshes, pin meshes, nozzle particles, rope meshes for swing/pull/tow/tether, and endpoint meshes. A set of default meshes and materials is included to get started.</div>
+</div>
+
+<!-- ── SUPPORT ── -->
+<div class="faq-section">Support & Updates</div>
+
+<div class="faq-item">
+  <div class="faq-q">Is documentation included?</div>
+  <div class="faq-a"><strong>Yes.</strong> Full online documentation with a Quick Start guide, detailed pages for every component, and a complete API reference covering every property, function, and event. A demo project with working examples of every feature is also included.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Will it be updated for future engine versions?</div>
+  <div class="faq-a"><strong>Yes.</strong> RAC is actively maintained and will be updated for new Unreal Engine releases. Bug fixes and feature updates are ongoing.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Where do I get support if I have issues?</div>
+  <div class="faq-a">Documentation is the first stop. For bugs or questions, reach out through the support channels listed on the Fab product page. Bug reports with reproduction steps get prioritized.</div>
+</div>
+
+<div class="footer">
+  RT Assets - RAC FAQ Draft - April 2026
+</div>
+
+</body>
+</html>
